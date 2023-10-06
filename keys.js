@@ -6,10 +6,11 @@ const init = () => {
 
   //Log every key that's pressed.
   keys.addListener(function (e, down) {
-    console.log(
-      `${e.name} ${e.state == 'DOWN' ? 'DOWN' : 'UP  '} [${e.rawKey._nameRaw}]`
-    );
+    if (e.state !== 'DOWN') return;
+    console.log(`[key input]: ${e.name} DOWN`);
   });
 };
+
+init();
 
 export default init;
