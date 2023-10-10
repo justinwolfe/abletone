@@ -8,9 +8,18 @@ const init = async () => {
   // Establishes a connection with Live
   await ableton.start();
 
+  ableton.song.get('scenes').then((scenes) => {
+    console.log(scenes.length);
+  });
+
+  // ableton.song.duplicateScene()
+
   console.log(
     await ableton.song.view.addListener('selected_track', (e) => {
       console.log(e.raw.name);
+    }),
+    await ableton.song.view.addListener('selected_scene', (e) => {
+      console.log(e);
     })
   );
 
@@ -38,8 +47,11 @@ const init = async () => {
 
   // // Set the tempo
   // await ableton.song.set('tempo', 85);
+  return {
+    actions: {
+      duplicateScene: ableton.song.duplicateScene,
+    },
+  };
 };
-
-init();
 
 export default init;
