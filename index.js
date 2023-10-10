@@ -11,7 +11,7 @@ const getIndexByRawId = (id, collection) =>
   collection.findIndex((item) => item.raw.id === id);
 
 // 1. Create an object to hold the state of your variables
-const state = {
+const baseState = {
   scenes: [],
   tracks: [],
   selectedSceneIndex: undefined,
@@ -21,16 +21,16 @@ const state = {
 
 const logCurrentState = () => {
   console.log({
-    scenesLength: state.scenes.length,
-    tracksLength: state.tracks.length,
-    selectedSceneIndex: state.selectedSceneIndex,
-    selectedTrackIndex: state.selectedTrackIndex,
-    selectedTrackName: state.selectedTrackName,
+    scenesLength: baseState.scenes.length,
+    tracksLength: baseState.tracks.length,
+    selectedSceneIndex: baseState.selectedSceneIndex,
+    selectedTrackIndex: baseState.selectedTrackIndex,
+    selectedTrackName: baseState.selectedTrackName,
   });
 };
 
-// 3. Use a Proxy to watch for changes in the `state` object
-const stateProxy = new Proxy(state, {
+// 3. Use a Proxy to watch for changes in the `baseState` object
+const state = new Proxy(baseState, {
   set(target, property, value) {
     target[property] = value;
     logCurrentState();
@@ -39,11 +39,11 @@ const stateProxy = new Proxy(state, {
 });
 
 const updateScenes = async () => {
-  stateProxy.scenes = await ableton.song.get('scenes');
+  state.scenes = await ableton.song.get('scenes');
 };
 
 const updateTracks = async () => {
-  stateProxy.tracks = await ableton.song.get('tracks');
+  state.tracks = await ableton.song.get('tracks');
 };
 
 const registerAbletonListeners = async () => {
@@ -51,39 +51,33 @@ const registerAbletonListeners = async () => {
   await updateTracks();
 
   const initialSelectedScene = await ableton.song.view.get('selected_scene');
-  stateProxy.selectedSceneIndex = getIndexByRawId(
+  state.selectedSceneIndex = getIndexByRawId(
     initialSelectedScene.raw.id,
-    stateProxy.scenes
+    state.scenes
   );
 
   const initialSelectedTrack = await ableton.song.view.get('selected_track');
-  stateProxy.selectedTrackIndex = getIndexByRawId(
+  state.selectedTrackIndex = getIndexByRawId(
     initialSelectedTrack.raw.id,
-    stateProxy.tracks
+    state.tracks
   );
-  stateProxy.selectedTrackName = initialSelectedTrack.raw.name;
+  state.selectedTrackName = initialSelectedTrack.raw.name;
 
   ableton.song.addListener('tracks', async (t) => {
-    stateProxy.tracks = t;
+    state.tracks = t;
   });
 
   ableton.song.addListener('scenes', async (s) => {
-    stateProxy.scenes = s;
+    state.scenes = s;
   });
 
   ableton.song.view.addListener('selected_track', async (tr) => {
-    stateProxy.selectedTrackIndex = getIndexByRawId(
-      tr.raw.id,
-      stateProxy.tracks
-    );
-    stateProxy.selectedTrackName = tr.raw.name;
+    state.selectedTrackIndex = getIndexByRawId(tr.raw.id, state.tracks);
+    state.selectedTrackName = tr.raw.name;
   });
 
   ableton.song.view.addListener('selected_scene', async (sc) => {
-    stateProxy.selectedSceneIndex = getIndexByRawId(
-      sc.raw.id,
-      stateProxy.scenes
-    );
+    state.selectedSceneIndex = getIndexByRawId(sc.raw.id, state.scenes);
   });
 };
 
