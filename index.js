@@ -33,7 +33,7 @@ const logCurrentState = () => {
 const state = new Proxy(baseState, {
   set(target, property, value) {
     target[property] = value;
-    logCurrentState();
+    // logCurrentState();
     return true;
   },
 });
@@ -82,28 +82,44 @@ const registerAbletonListeners = async () => {
 };
 
 const init = async () => {
-  await ableton.start();
+  try {
+    await ableton.start();
 
-  await registerAbletonListeners();
+    await registerAbletonListeners();
 
-  initKeys(async (key) => {
-    switch (key.toLowerCase()) {
-      case 'a':
-        console.log('hello');
-        break;
-      case 'b':
-        console.log('foo');
-        break;
-      case 'c': {
-        console.log('bar');
-        const scenes = await ableton.song.get('scenes');
-        const scene = await ableton.song.view.get('selected_scene');
-        const sceneIndex = scenes.findIndex((s) => s.raw.id === scene.raw.id);
-        console.log('sceneIndex', sceneIndex);
-        break;
+    initKeys(async (key) => {
+      switch (key.toLowerCase()) {
+        case 'a':
+          handleSceneChange({ state, direction: -1 });
+          break;
+        case 'b':
+          handleSceneChange({ state, direction: 1 });
+          break;
+        case 'c':
+          await ableton.song.duplicateScene(state.selectedSceneIndex);
+          console.log('- duplicated scene');
+          break;
       }
-    }
-  });
+    });
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 init();
+
+async function handleSceneChange({ state, direction }) {
+  let newSceneIndex = state.selectedSceneIndex + direction;
+
+  if (newSceneIndex < 0) {
+    newSceneIndex = 0;
+  } else if (newSceneIndex >= state.scenes.length) {
+    newSceneIndex = state.scenes.length - 1;
+  }
+
+  const scene = state.scenes[newSceneIndex];
+  await scene.fire();
+
+  let logMsg = direction === -1 ? '⬆️ - previous scene' : '⬇️ - next scene';
+  console.log(logMsg);
+}
