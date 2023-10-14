@@ -99,6 +99,10 @@ const init = async () => {
           await ableton.song.duplicateScene(state.selectedSceneIndex);
           console.log('- duplicated scene');
           break;
+        case '#record':
+          break;
+        case '#delete':
+          break;
       }
     });
   } catch (e) {
