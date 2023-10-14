@@ -7,6 +7,11 @@ import initKeys from './keys.js';
 
 initMidi();
 
+const TRACK_TYPES = {
+  MONITOR: 'm',
+  GROUP: 'g',
+};
+
 const getIndexByRawId = (id, collection) =>
   collection.findIndex((item) => item.raw.id === id);
 
@@ -106,11 +111,11 @@ const init = async () => {
           const matchingOutputTracks = state.tracks.filter((track) => {
             const [trackName, trackType] = track.raw.name.split('-');
 
-            if (trackName !== name) {
-              return false;
-            }
-
-            if (trackType === 'g' || trackType === 'm') {
+            if (
+              trackName !== name ||
+              trackType === TRACK_TYPES.MONITOR ||
+              trackType === TRACK_TYPES.GROUP
+            ) {
               return false;
             }
 
