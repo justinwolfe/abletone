@@ -79,6 +79,8 @@ const registerAbletonListeners = async () => {
   ableton.song.view.addListener('selected_scene', async (sc) => {
     state.selectedSceneIndex = getIndexByRawId(sc.raw.id, state.scenes);
   });
+
+  logCurrentState();
 };
 
 const init = async () => {
@@ -99,7 +101,29 @@ const init = async () => {
           await ableton.song.duplicateScene(state.selectedSceneIndex);
           console.log('- duplicated scene');
           break;
-        case '#record':
+        case 'r':
+          const [name, type] = state.selectedTrackName.split('-');
+          const matchingOutputTracks = state.tracks.filter((track) => {
+            const [trackName, trackType] = track.raw.name.split('-');
+
+            if (trackName !== name) {
+              return false;
+            }
+
+            if (trackType === 'g' || trackType === 'm') {
+              return false;
+            }
+
+            return true;
+          });
+
+          console.log({
+            name,
+            type,
+            matchingTracks: matchingOutputTracks.length,
+          });
+
+          //   console.log(state.tracks[state.selectedTrackIndex]);
           break;
         case '#delete':
           break;
