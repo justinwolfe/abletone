@@ -113,14 +113,6 @@ const init = async () => {
             trackKey,
           });
 
-          //   const clipSlots = await track.get('clip_slots');
-          //   const currentClipSlotHasClip =
-          //     clipSlots[state.selectedTrackIndex].raw.has_clip;
-
-          //   if (currentClipSlotHasClip) {
-          //     return false;
-          //   }
-
           //   if (matchingOutputTracks.length === 0) {
           //     return;
           //   }
@@ -134,14 +126,6 @@ const init = async () => {
             type,
             matchingTracks: matchingOutputTracks.length,
           });
-
-          //   const clipSlots = await matchingOutputTracks[1].get('clip_slots');
-          //   console.log('clip slots length', clipSlots.length);
-          //   console.log('current slot', clipSlots[state.selectedTrackIndex].raw);
-          //   //   const currentClipSlotHasClip =
-          //   //     clipSlots[state.selectedTrackIndex].raw;
-
-          //   //   console.log({ currentClipSlotHasClip });
 
           break;
         case '#delete':
