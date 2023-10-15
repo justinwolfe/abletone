@@ -113,13 +113,28 @@ const init = async () => {
             trackKey,
           });
 
-          //   if (matchingOutputTracks.length === 0) {
-          //     return;
-          //   }
+          if (matchingOutputTracks.length === 0) {
+            console.log('No matching output tracks found');
+            return;
+          }
 
-          //   if (matchingOutputTracks.length === 1) {
-          //     return;
-          //   }
+          if (matchingOutputTracks.length === 1) {
+            // duplicate the monitor track, which is not the selected track
+            // this should work whether fired from the monitor or any other track
+            // await ableton.song.duplicateTrack(state.selectedTrackIndex);
+            // await ableton.song.view.set(
+            //   'selectedTrack',
+            //   state.selectedTrackIndex - 2
+            // );
+            const highlightedClipSlot = await ableton.song.view.get(
+              'highlighted_clip_slot'
+            );
+            await highlightedClipSlot.fire();
+          }
+
+          if (matchingOutputTracks.length > 1) {
+            // pick the first empty one, select it, and fire
+          }
 
           console.log({
             trackKey,
