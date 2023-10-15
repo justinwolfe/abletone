@@ -107,28 +107,42 @@ const init = async () => {
           console.log('- duplicated scene');
           break;
         case 'r':
-          const [name, type] = state.selectedTrackName.split('-');
-          const matchingOutputTracks = state.tracks.filter((track) => {
-            const [trackName, trackType] = track.raw.name.split('-');
-
-            if (
-              trackName !== name ||
-              trackType === TRACK_TYPES.MONITOR ||
-              trackType === TRACK_TYPES.GROUP
-            ) {
-              return false;
-            }
-
-            return true;
+          const [trackKey, type] = state.selectedTrackName.split('-');
+          const matchingOutputTracks = await findMatchingOutputTracks({
+            state,
+            trackKey,
           });
 
+          //   const clipSlots = await track.get('clip_slots');
+          //   const currentClipSlotHasClip =
+          //     clipSlots[state.selectedTrackIndex].raw.has_clip;
+
+          //   if (currentClipSlotHasClip) {
+          //     return false;
+          //   }
+
+          //   if (matchingOutputTracks.length === 0) {
+          //     return;
+          //   }
+
+          //   if (matchingOutputTracks.length === 1) {
+          //     return;
+          //   }
+
           console.log({
-            name,
+            trackKey,
             type,
             matchingTracks: matchingOutputTracks.length,
           });
 
-          //   console.log(state.tracks[state.selectedTrackIndex]);
+          //   const clipSlots = await matchingOutputTracks[1].get('clip_slots');
+          //   console.log('clip slots length', clipSlots.length);
+          //   console.log('current slot', clipSlots[state.selectedTrackIndex].raw);
+          //   //   const currentClipSlotHasClip =
+          //   //     clipSlots[state.selectedTrackIndex].raw;
+
+          //   //   console.log({ currentClipSlotHasClip });
+
           break;
         case '#delete':
           break;
@@ -155,4 +169,30 @@ async function handleSceneChange({ state, direction }) {
 
   let logMsg = direction === -1 ? '⬆️ - previous scene' : '⬇️ - next scene';
   console.log(logMsg);
+}
+
+async function findMatchingOutputTracks({ state, trackKey }) {
+  const matchingOutputTracks = [];
+
+  for (const track of state.tracks) {
+    const [trackName, trackType] = track.raw.name.split('-');
+
+    if (
+      trackName !== trackKey ||
+      trackType === TRACK_TYPES.MONITOR ||
+      trackType === TRACK_TYPES.GROUP
+    ) {
+      continue;
+    }
+
+    const clipSlots = await track.get('clip_slots');
+    const currentClipSlotHasClip =
+      clipSlots[state.selectedSceneIndex].raw.has_clip;
+
+    if (!currentClipSlotHasClip) {
+      matchingOutputTracks.push(track);
+    }
+  }
+
+  return matchingOutputTracks;
 }
