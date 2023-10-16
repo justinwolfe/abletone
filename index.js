@@ -10,6 +10,8 @@ initMidi();
 const TRACK_TYPES = {
   MONITOR: 'm',
   GROUP: 'g',
+  TEMPLATE: 't',
+  RENDER: 'r',
 };
 
 const getIndexByRawId = (id, collection) =>
@@ -22,6 +24,7 @@ const baseState = {
   selectedSceneIndex: undefined,
   selectedTrackIndex: undefined,
   selectedTrackName: undefined,
+  isRecording: false,
 };
 
 const logCurrentState = () => {
@@ -108,39 +111,52 @@ const init = async () => {
           break;
         case 'r':
           const [trackKey, type] = state.selectedTrackName.split('-');
-          const matchingOutputTracks = await findMatchingOutputTracks({
-            state,
-            trackKey,
-          });
+          const highlightedClipSlot = await ableton.song.view.get(
+            'highlighted_clip_slot'
+          );
 
-          if (matchingOutputTracks.length === 0) {
-            console.log('No matching output tracks found');
+          if (highlightedClipSlot.raw.is_recording) {
+            await highlightedClipSlot.fire();
             return;
           }
 
-          if (matchingOutputTracks.length === 1) {
-            // duplicate the monitor track, which is not the selected track
-            // this should work whether fired from the monitor or any other track
-            // await ableton.song.duplicateTrack(state.selectedTrackIndex);
-            // await ableton.song.view.set(
-            //   'selectedTrack',
-            //   state.selectedTrackIndex - 2
-            // );
-            const highlightedClipSlot = await ableton.song.view.get(
-              'highlighted_clip_slot'
-            );
-            await highlightedClipSlot.fire();
-          }
+          //   const matchingOutputTracks = await findMatchingOutputTracks({
+          //     state,
+          //     trackKey,
+          //   });
 
-          if (matchingOutputTracks.length > 1) {
-            // pick the first empty one, select it, and fire
-          }
+          //   if (matchingOutputTracks.length === 0) {
+          const templateIndex = state.tracks.findIndex((track) =>
+            track.raw.name.includes(`${trackKey}-${TRACK_TYPES.TEMPLATE}`)
+          );
 
-          console.log({
-            trackKey,
-            type,
-            matchingTracks: matchingOutputTracks.length,
-          });
+          await ableton.song.duplicateTrack(templateIndex);
+          const selectedTrack = await ableton.song.view.get('selected_track');
+          await selectedTrack.set('name', `${trackKey}-${TRACK_TYPES.RENDER}`);
+          await selectedTrack.set('arm', true);
+          const newHighlightedClipSlot = await ableton.song.view.get(
+            'highlighted_clip_slot'
+          );
+          await newHighlightedClipSlot.fire();
+          return;
+          //   }
+
+          //   if (matchingOutputTracks.length === 1) {
+          //     const highlightedClipSlot = await ableton.song.view.get(
+          //       'highlighted_clip_slot'
+          //     );
+          //     await highlightedClipSlot.fire();
+          //   }
+
+          //   if (matchingOutputTracks.length > 1) {
+          //     // pick the first empty one, select it, and fire
+          //   }
+
+          //   console.log({
+          //     trackKey,
+          //     type,
+          //     matchingTracks: matchingOutputTracks.length,
+          //   });
 
           break;
         case '#delete':
@@ -179,7 +195,8 @@ async function findMatchingOutputTracks({ state, trackKey }) {
     if (
       trackName !== trackKey ||
       trackType === TRACK_TYPES.MONITOR ||
-      trackType === TRACK_TYPES.GROUP
+      trackType === TRACK_TYPES.GROUP ||
+      trackType === TRACK_TYPES.TEMPLATE
     ) {
       continue;
     }
