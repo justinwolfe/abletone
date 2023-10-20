@@ -120,6 +120,8 @@ const init = async () => {
           break;
         case 'c':
           await ableton.song.duplicateScene(state.selectedSceneIndex);
+          const selectedScene = await ableton.song.view.get('selected_scene');
+          selectedScene.fire();
           console.log('- duplicated scene');
           break;
         case 'r':
@@ -143,6 +145,7 @@ const init = async () => {
           });
 
           if (!matchingOutputTracks.length) {
+            console.log('- out of tracks');
             return;
           }
 
