@@ -30,7 +30,7 @@ const init = async () => {
           selectedScene.fire();
           console.log('- duplicated scene');
           break;
-        case 'r':
+        case 'k':
           const [trackKey, trackType] = state.selectedTrackName.split('-');
           const highlightedClipSlot = await ableton.song.view.get(
             'highlighted_clip_slot'
