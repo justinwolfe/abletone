@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@nut-tree/nut-js": "^3.1.2",
     "ableton-js": "^3.3.3",
     "ansi-escapes": "^6.2.0",
     "cli-table3": "^0.6.3",
