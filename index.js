@@ -51,7 +51,19 @@ const init = async () => {
           });
 
           if (!matchingOutputTracks.length) {
-            console.log('- out of tracks');
+            console.log('- out of tracks, making a new one');
+            await ableton.song.duplicateTrack(state.selectedTrackIndex);
+            const highlightedClipSlot = await ableton.song.view.get(
+              'highlighted_clip_slot'
+            );
+
+            if (highlightedClipSlot?.raw?.has_clip) {
+              await highlightedClipSlot.deleteClip();
+              const selectedTrack = await ableton.song.view.get(
+                'selected_track'
+              );
+              await selectedTrack.set('arm', true);
+            }
             return;
           }
 
@@ -72,7 +84,7 @@ const init = async () => {
             'highlighted_clip_slot'
           );
 
-          if (highlightedClipSlot.raw.has_clip) {
+          if (highlightedClipSlot?.raw?.has_clip) {
             await highlightedClipSlot.deleteClip();
           }
 
