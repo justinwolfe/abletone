@@ -66,8 +66,7 @@ const init = async () => {
           await newHighlightedClipSlot.fire();
           break;
 
-        case '#delete':
-          // Delete logic, if needed, goes here
+        case 'l':
           break;
       }
     });

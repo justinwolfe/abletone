@@ -42,10 +42,12 @@ const registerAbletonListeners = async () => {
   ableton.song.view.addListener('selected_track', async (tr) => {
     state.selectedTrackIndex = getIndexByRawId(tr.raw.id, state.tracks);
     state.selectedTrackName = tr.raw.name;
+    console.log('selected track: ', state.selectedTrackName);
   });
 
   ableton.song.view.addListener('selected_scene', async (sc) => {
     state.selectedSceneIndex = getIndexByRawId(sc.raw.id, state.scenes);
+    console.log('selected scene: ', state.selectedSceneIndex);
   });
 
   logCurrentState();
