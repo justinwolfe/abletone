@@ -47,7 +47,7 @@ async function findMatchingOutputTracks({ state, trackKey }) {
   return matchingOutputTracks;
 }
 
-const selectMonitorTrack = async ({ state, groupName }) => {
+const selectMonitorTrack = async ({ state, ableton, groupName }) => {
   const monitorTrack = state.tracks.find((track) => {
     const [trackName, trackType] = track.raw.name.split('-');
     return trackType === TRACK_TYPES.MONITOR && trackName === groupName;
