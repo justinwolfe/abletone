@@ -97,22 +97,27 @@ const init = async () => {
 
         case '2': {
           await selectMonitorTrack({ state, ableton, groupName: 'keys1' });
+          break;
         }
 
         case '3': {
           await selectMonitorTrack({ state, ableton, groupName: 'keys2' });
+          break;
         }
 
         case '4': {
           await selectMonitorTrack({ state, ableton, groupName: 'git' });
+          break;
         }
 
         case '5': {
           await selectMonitorTrack({ state, ableton, groupName: 'vox1' });
+          break;
         }
 
         case '6': {
           await selectMonitorTrack({ state, ableton, groupName: 'vox2' });
+          break;
         }
       }
     });
