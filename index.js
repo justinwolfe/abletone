@@ -96,23 +96,23 @@ const init = async () => {
         }
 
         case '2': {
-          await selectMonitorTrack('keys1');
+          await selectMonitorTrack({ state, groupName: 'keys1' });
         }
 
         case '3': {
-          await selectMonitorTrack('keys2');
+          await selectMonitorTrack({ state, groupName: 'keys2' });
         }
 
         case '4': {
-          await selectMonitorTrack('git');
+          await selectMonitorTrack({ state, groupName: 'git' });
         }
 
         case '5': {
-          await selectMonitorTrack('vox1');
+          await selectMonitorTrack({ state, groupName: 'vox1' });
         }
 
         case '6': {
-          await selectMonitorTrack('vox2');
+          await selectMonitorTrack({ state, groupName: 'vox2' });
         }
       }
     });
