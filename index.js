@@ -89,6 +89,30 @@ const init = async () => {
           }
 
           break;
+
+        case '1': {
+          // await selecttMonitorTrack('')
+        }
+
+        case '2': {
+          await selecttMonitorTrack('keys1');
+        }
+
+        case '3': {
+          await selecttMonitorTrack('keys2');
+        }
+
+        case '4': {
+          await selecttMonitorTrack('git');
+        }
+
+        case '5': {
+          await selecttMonitorTrack('vox1');
+        }
+
+        case '6': {
+          await selecttMonitorTrack('vox2');
+        }
       }
     });
   } catch (e) {
@@ -97,3 +121,16 @@ const init = async () => {
 };
 
 init();
+
+const selecttMonitorTrack = async (groupName) => {
+  const monitorTrack = state.tracks.find((track) => {
+    const [trackName, trackType] = track.raw.name.split('-');
+    return trackType === TRACK_TYPES.MONITOR && trackName === groupName;
+  });
+
+  if (!monitorTrack) {
+    return;
+  }
+
+  await ableton.song.view.set('selected_track', monitorTrack.raw.id);
+};
