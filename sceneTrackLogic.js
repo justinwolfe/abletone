@@ -57,6 +57,8 @@ const selectMonitorTrack = async ({ state, ableton, groupName }) => {
     return;
   }
 
+  console.log('monitor', monitorTrack.raw.name);
+
   await ableton.song.view.set('selected_track', monitorTrack.raw.id);
 };
 
