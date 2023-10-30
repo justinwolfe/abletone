@@ -6,6 +6,7 @@ import { state, logCurrentState } from './state.js';
 import {
   handleSceneChange,
   findMatchingOutputTracks,
+  selectMonitorTrack,
   TRACK_TYPES,
 } from './sceneTrackLogic.js';
 
@@ -95,23 +96,23 @@ const init = async () => {
         }
 
         case '2': {
-          await selecttMonitorTrack('keys1');
+          await selectMonitorTrack('keys1');
         }
 
         case '3': {
-          await selecttMonitorTrack('keys2');
+          await selectMonitorTrack('keys2');
         }
 
         case '4': {
-          await selecttMonitorTrack('git');
+          await selectMonitorTrack('git');
         }
 
         case '5': {
-          await selecttMonitorTrack('vox1');
+          await selectMonitorTrack('vox1');
         }
 
         case '6': {
-          await selecttMonitorTrack('vox2');
+          await selectMonitorTrack('vox2');
         }
       }
     });
@@ -121,16 +122,3 @@ const init = async () => {
 };
 
 init();
-
-const selecttMonitorTrack = async (groupName) => {
-  const monitorTrack = state.tracks.find((track) => {
-    const [trackName, trackType] = track.raw.name.split('-');
-    return trackType === TRACK_TYPES.MONITOR && trackName === groupName;
-  });
-
-  if (!monitorTrack) {
-    return;
-  }
-
-  await ableton.song.view.set('selected_track', monitorTrack.raw.id);
-};

@@ -47,4 +47,22 @@ async function findMatchingOutputTracks({ state, trackKey }) {
   return matchingOutputTracks;
 }
 
-export { handleSceneChange, findMatchingOutputTracks, TRACK_TYPES };
+const selectMonitorTrack = async (groupName) => {
+  const monitorTrack = state.tracks.find((track) => {
+    const [trackName, trackType] = track.raw.name.split('-');
+    return trackType === TRACK_TYPES.MONITOR && trackName === groupName;
+  });
+
+  if (!monitorTrack) {
+    return;
+  }
+
+  await ableton.song.view.set('selected_track', monitorTrack.raw.id);
+};
+
+export {
+  handleSceneChange,
+  findMatchingOutputTracks,
+  selectMonitorTrack,
+  TRACK_TYPES,
+};
