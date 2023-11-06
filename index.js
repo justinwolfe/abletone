@@ -97,10 +97,12 @@ const init = async () => {
             const trackId = track.raw.id;
             const mixerDevice = await track.get('mixer_device');
             const volume = await mixerDevice.get('volume');
+            const panning = await mixerDevice.get('panning');
             mixprint[trackId] = {
               trackId: trackId,
               trackName: track.raw.name,
               volume: volume.raw.value,
+              panning: panning.raw.value,
             };
           });
         }
@@ -118,6 +120,8 @@ const init = async () => {
             const mixerDevice = await track.get('mixer_device');
             const volume = await mixerDevice.get('volume');
             await volume.set('value', mixprint[key].volume);
+            const panning = await mixerDevice.get('panning');
+            await panning.set('value', mixprint[key].panning);
           }
         }
 
