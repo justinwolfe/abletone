@@ -11,6 +11,7 @@ import {
 } from './sceneTrackLogic.js';
 
 initMidi();
+let mixprint = {};
 
 const init = async () => {
   try {
@@ -91,8 +92,33 @@ const init = async () => {
 
           break;
 
+        case '0': {
+          state.tracks.forEach(async (track) => {
+            const trackId = track.raw.id;
+            const mixerDevice = await track.get('mixer_device');
+            const volume = await mixerDevice.get('volume');
+            mixprint[trackId] = {
+              trackId: trackId,
+              trackName: track.raw.name,
+              volume: volume.raw.value,
+            };
+          });
+        }
+
         case '1': {
-          // await selecttMonitorTrack('')
+          const tracks = await ableton.song.get('tracks', key);
+          for (key in mixprint) {
+            console.log(key, mixprint[key]);
+            const track = tracks.find((track) => track.raw.id === key);
+
+            if (!track) {
+              return;
+            }
+
+            const mixerDevice = await track.get('mixer_device');
+            const volume = await mixerDevice.get('volume');
+            await volume.set('value', mixprint[key].volume);
+          }
         }
 
         case '2': {
