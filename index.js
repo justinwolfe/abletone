@@ -93,9 +93,7 @@ const init = async () => {
           break;
 
         case '0': {
-          for (track of state.tracks) {
-          }
-          state.tracks.forEach(async (track) => {
+          for (var track of state.tracks) {
             const trackId = track.raw.id;
             const mixerDevice = await track.get('mixer_device');
             const volume = await mixerDevice.get('volume');
@@ -110,7 +108,9 @@ const init = async () => {
               panning: panning.raw.value,
               sends: sends.map((send) => send.raw),
             };
-          });
+          }
+          console.log('saved mix');
+          break;
         }
 
         case '1': {
@@ -141,7 +141,8 @@ const init = async () => {
               }
             }
           }
-          console.log('printed mix');
+          console.log('restored mix');
+          break;
         }
 
         case '2': {
