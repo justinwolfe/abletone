@@ -93,24 +93,30 @@ const init = async () => {
           break;
 
         case '0': {
+          for (track of state.tracks) {
+          }
           state.tracks.forEach(async (track) => {
             const trackId = track.raw.id;
             const mixerDevice = await track.get('mixer_device');
             const volume = await mixerDevice.get('volume');
             const panning = await mixerDevice.get('panning');
+            const sends = await mixerDevice.get('sends');
+            const activator = await mixerDevice.get('track_activator');
             mixprint[trackId] = {
               trackId: trackId,
               trackName: track.raw.name,
+              activator: activator.raw.value,
               volume: volume.raw.value,
               panning: panning.raw.value,
+              sends: sends.map((send) => send.raw),
             };
           });
         }
 
         case '1': {
           const tracks = await ableton.song.get('tracks', key);
+
           for (key in mixprint) {
-            console.log(key, mixprint[key]);
             const track = tracks.find((track) => track.raw.id === key);
 
             if (!track) {
@@ -118,11 +124,24 @@ const init = async () => {
             }
 
             const mixerDevice = await track.get('mixer_device');
+            const activator = await mixerDevice.get('track_activator');
+            await activator.set('value', mixprint[key].activator);
             const volume = await mixerDevice.get('volume');
             await volume.set('value', mixprint[key].volume);
             const panning = await mixerDevice.get('panning');
             await panning.set('value', mixprint[key].panning);
+            const sends = await mixerDevice.get('sends');
+            for (var send of sends) {
+              const sendToPrint = mixprint[key].sends.find(
+                (capturedSend) => capturedSend.id === send.raw.id
+              );
+
+              if (sendToPrint) {
+                await send.set('value', sendToPrint.value);
+              }
+            }
           }
+          console.log('printed mix');
         }
 
         case '2': {
