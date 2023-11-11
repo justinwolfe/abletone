@@ -9,7 +9,7 @@ import {
   selectMonitorTrack,
   TRACK_TYPES,
 } from './sceneTrackLogic.js';
-import { saveMix, restoreMix } from './mix.js';
+import AbletonMixManager from './mix.js';
 
 initMidi();
 let mixprint = {};
@@ -18,6 +18,7 @@ const init = async () => {
   try {
     await ableton.start();
     await registerAbletonListeners();
+    const mixManager = new AbletonMixManager('./mixtape.json');
 
     initKeys(async (key) => {
       switch (key.toLowerCase()) {
@@ -94,11 +95,11 @@ const init = async () => {
           break;
 
         case '0':
-          await saveMix(ableton);
+          await mixManager.saveMix(ableton);
           break;
 
         case '1':
-          await restoreMix(ableton);
+          await mixManager.restoreMix(ableton);
           break;
 
         case '2': {
