@@ -31,13 +31,15 @@ class AbletonMixManager {
 
   async saveMix(ableton) {
     const tracks = await ableton.song.get('tracks');
-    for (const track of tracks) {
+    const mixPromises = tracks.map(async (track) => {
       const trackId = track.raw.id;
       const mixerDevice = await track.get('mixer_device');
-      const volume = await mixerDevice.get('volume');
-      const panning = await mixerDevice.get('panning');
-      const sends = await mixerDevice.get('sends');
-      const activator = await mixerDevice.get('track_activator');
+      const [volume, panning, sends, activator] = await Promise.all([
+        mixerDevice.get('volume'),
+        mixerDevice.get('panning'),
+        mixerDevice.get('sends'),
+        mixerDevice.get('track_activator'),
+      ]);
       this.mixprint[trackId] = {
         trackId: trackId,
         trackName: track.raw.name,
@@ -46,37 +48,44 @@ class AbletonMixManager {
         panning: panning.raw.value,
         sends: sends.map((send) => send.raw),
       };
-    }
+    });
+
+    await Promise.all(mixPromises);
     console.log('saved mix');
     await this.saveMixToFile();
   }
 
   async restoreMix(ableton) {
     const tracks = await ableton.song.get('tracks');
-    for (const key in this.mixprint) {
+    const restorePromises = Object.keys(this.mixprint).map(async (key) => {
       const track = tracks.find((track) => track.raw.id === key);
-      if (!track) {
-        return;
-      }
+      if (!track) return;
+
       const mixerDevice = await track.get('mixer_device');
-      const activator = await mixerDevice.get('track_activator');
-      await activator.set('value', this.mixprint[key].activator);
-      const volume = await mixerDevice.get('volume');
-      await volume.set('value', this.mixprint[key].volume);
-      const panning = await mixerDevice.get('panning');
-      await panning.set('value', this.mixprint[key].panning);
-      const sends = await mixerDevice.get('sends');
-      for (const send of sends) {
-        const sendToPrint = this.mixprint[key].sends.find(
-          (capturedSend) => capturedSend.id === send.raw.id
-        );
-        if (sendToPrint) {
-          await send.set('value', sendToPrint.value);
-        }
-      }
-    }
+      const [activator, volume, panning, sends] = await Promise.all([
+        mixerDevice.get('track_activator'),
+        mixerDevice.get('volume'),
+        mixerDevice.get('panning'),
+        mixerDevice.get('sends'),
+      ]);
+
+      await Promise.all([
+        activator.set('value', this.mixprint[key].activator),
+        volume.set('value', this.mixprint[key].volume),
+        panning.set('value', this.mixprint[key].panning),
+        ...sends.map((send) => {
+          const sendToPrint = this.mixprint[key].sends.find(
+            (capturedSend) => capturedSend.id === send.raw.id
+          );
+          return sendToPrint
+            ? send.set('value', sendToPrint.value)
+            : Promise.resolve();
+        }),
+      ]);
+    });
+
+    await Promise.all(restorePromises);
     console.log('restored mix');
   }
 }
-
 export default AbletonMixManager;
