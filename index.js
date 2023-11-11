@@ -19,9 +19,27 @@ const init = async () => {
     await ableton.start();
     await registerAbletonListeners();
     const mixManager = new AbletonMixManager('./mixtape.json');
+    let isBlocked = false;
+    // logCurrentState();
 
     initKeys(async (key) => {
-      switch (key.toLowerCase()) {
+      key = key.toLowerCase();
+      if (key === 'forward slash') {
+        isBlocked = !isBlocked;
+        console.log(
+          isBlocked
+            ? 'Keypresses are now blocked'
+            : 'Keypresses are now allowed'
+        );
+        return;
+      }
+
+      if (isBlocked) {
+        // Ignore other keys if isBlocked is true
+        return;
+      }
+
+      switch (key) {
         case 'a':
           handleSceneChange({ state, direction: -1 });
           break;

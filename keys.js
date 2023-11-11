@@ -10,6 +10,7 @@ const init = (callback) => {
   //Log every key that's pressed.
   keys.addListener(function (e, down) {
     if (e.state !== 'DOWN') return;
+    // console.log(e.name);
     callback(e.name);
   });
 };
