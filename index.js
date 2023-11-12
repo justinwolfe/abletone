@@ -11,11 +11,9 @@ import {
 } from './sceneTrackLogic.js';
 import AbletonMixManager from './mix.js';
 
-initMidi();
-let mixprint = {};
-
 const init = async () => {
   try {
+    initMidi();
     await ableton.start();
     await registerAbletonListeners();
     const mixManager = new AbletonMixManager('./mixtape.json');
