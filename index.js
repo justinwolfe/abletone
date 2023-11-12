@@ -10,10 +10,12 @@ import {
   TRACK_TYPES,
 } from './sceneTrackLogic.js';
 import AbletonMixManager from './mix.js';
+import { initServer } from './server.js';
 
 const init = async () => {
   try {
     initMidi();
+    await initServer();
     await ableton.start();
     await registerAbletonListeners();
     const mixManager = new AbletonMixManager('./mixtape.json');

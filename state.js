@@ -7,6 +7,8 @@ const baseState = {
   isRecording: false,
 };
 
+const stateChangeSubscribers = [];
+
 const logCurrentState = () => {
   console.log({
     scenesLength: baseState.scenes.length,
@@ -20,9 +22,27 @@ const logCurrentState = () => {
 const state = new Proxy(baseState, {
   set(target, property, value) {
     target[property] = value;
+    stateChangeSubscribers.forEach((callback) => callback({ ...target }));
+
     // logCurrentState();
     return true;
   },
 });
 
-export { state, logCurrentState };
+const subscribeToStateChanges = (callback) => {
+  stateChangeSubscribers.push(callback);
+};
+
+const unsubscribeFromStateChanges = (callback) => {
+  const index = stateChangeSubscribers.indexOf(callback);
+  if (index > -1) {
+    stateChangeSubscribers.splice(index, 1);
+  }
+};
+
+export {
+  state,
+  logCurrentState,
+  subscribeToStateChanges,
+  unsubscribeFromStateChanges,
+};
