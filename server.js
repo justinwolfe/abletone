@@ -15,14 +15,26 @@ const initServer = async () => {
   const wss = new WebSocket.WebSocketServer({ server });
 
   app.get('/state', (req, res) => {
-    console.log('test it');
-    res.json({ test: 'it' });
+    res.json({
+      selectedSceneIndex: state.selectedSceneIndex,
+      selectedTrackIndex: state.selectedTrackIndex,
+      selectedTrackName: state.selectedTrackName,
+      isRecording: state.isRecording,
+    });
     // res.json(state);
   });
 
   wss.on('connection', (ws) => {
+    ws.send('fdfdsf');
     const stateChangeHandler = (newState) => {
-      ws.send({ test: 'it' });
+      ws.send(
+        JSON.stringify({
+          selectedSceneIndex: state.selectedSceneIndex,
+          selectedTrackIndex: state.selectedTrackIndex,
+          selectedTrackName: state.selectedTrackName,
+          isRecording: state.isRecording,
+        })
+      );
     };
 
     subscribeToStateChanges(stateChangeHandler);
