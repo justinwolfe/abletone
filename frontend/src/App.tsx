@@ -15,6 +15,11 @@ function App() {
     [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
   }[readyState];
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const sendToApi = (message: string) => {
+    sendMessage(JSON.stringify('phone home'));
+  };
+
   useEffect(() => {
     if (!lastMessage?.data) {
       return;
