@@ -29,6 +29,8 @@ const initServer = async () => {
   });
 
   wss.on('connection', (ws) => {
+    ws.send(JSON.stringify(getSerializableState(state)));
+
     const stateChangeHandler = (newState) => {
       ws.send(JSON.stringify(getSerializableState(newState)));
     };
