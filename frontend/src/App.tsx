@@ -20,6 +20,8 @@ function App() {
     sendMessage(JSON.stringify('phone home'));
   };
 
+  console.log(apiState);
+
   useEffect(() => {
     if (!lastMessage?.data) {
       return;
@@ -29,10 +31,23 @@ function App() {
     setApiState(newData);
   }, [lastMessage]);
 
+  if (Object.keys(apiState).length === 0) {
+    return null;
+  }
+
+  const {
+    selectedSceneIndex,
+    selectedTrackIndex,
+    selectedTrackName,
+    isRecording,
+  } = apiState;
+
   return (
     <>
-      <div>{connectionStatus}</div>
-      <div>{JSON.stringify(apiState)}</div>
+      <div>connection status: {connectionStatus}</div>
+      <div>TRACK: {selectedTrackName}</div>
+      <div>SCENE: {selectedSceneIndex}</div>
+      <div>recording: {isRecording}</div>
     </>
   );
 }
