@@ -20,8 +20,6 @@ function App() {
     sendMessage(JSON.stringify('phone home'));
   };
 
-  console.log(apiState);
-
   useEffect(() => {
     if (!lastMessage?.data) {
       return;
@@ -40,6 +38,8 @@ function App() {
     selectedTrackIndex,
     selectedTrackName,
     isRecording,
+    isPlaying,
+    songTime,
   } = apiState;
 
   return (
@@ -48,6 +48,8 @@ function App() {
       <div>TRACK: {selectedTrackName}</div>
       <div>SCENE: {selectedSceneIndex}</div>
       <div>recording: {isRecording}</div>
+      <div>playing: {isPlaying}</div>
+      <div>songTime: {songTime}</div>
     </>
   );
 }

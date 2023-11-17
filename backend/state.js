@@ -5,6 +5,7 @@ const baseState = {
   selectedTrackIndex: undefined,
   selectedTrackName: undefined,
   isRecording: false,
+  isPlaying: false,
 };
 
 const stateChangeSubscribers = [];

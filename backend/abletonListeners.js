@@ -39,6 +39,18 @@ const registerAbletonListeners = async () => {
     state.scenes = s;
   });
 
+  ableton.song.addListener('is_playing', async (isPlaying) => {
+    state.isPlaying = isPlaying;
+  });
+
+  ableton.song.addListener('session_record_status', async (isRecording) => {
+    state.isRecording = isRecording;
+  });
+
+  ableton.song.addListener('current_song_time', async (time) => {
+    state.songTime = time;
+  });
+
   ableton.song.view.addListener('selected_track', async (tr) => {
     state.selectedTrackIndex = getIndexByRawId(tr.raw.id, state.tracks);
     state.selectedTrackName = tr.raw.name;

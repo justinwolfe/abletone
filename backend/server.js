@@ -13,6 +13,8 @@ const getSerializableState = (state) => {
     selectedTrackIndex: state.selectedTrackIndex,
     selectedTrackName: state.selectedTrackName,
     isRecording: state.isRecording,
+    isPlaying: state.isPlaying,
+    songTime: state.songTime,
   };
 };
 
