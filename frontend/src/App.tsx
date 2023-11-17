@@ -2,6 +2,18 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
+const getRecordingStatus = (number: number) => {
+  if (number === 2) {
+    return 'Counting in';
+  }
+
+  if (number === 1) {
+    return 'Recording';
+  }
+
+  return '';
+};
+
 function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
     'ws://localhost:3000/ws'
@@ -47,7 +59,7 @@ function App() {
       <div>connection status: {connectionStatus}</div>
       <div>TRACK: {selectedTrackName}</div>
       <div>SCENE: {selectedSceneIndex}</div>
-      <div>recording: {isRecording}</div>
+      <div>recording: {getRecordingStatus(isRecording)}</div>
       <div>playing: {isPlaying}</div>
       <div>songTime: {songTime}</div>
     </>
