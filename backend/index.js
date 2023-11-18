@@ -12,6 +12,17 @@ import {
 import AbletonMixManager from './mix.js';
 import { initServer } from './server.js';
 
+const DOUBLE_PRESS_DELAY = 300; // milliseconds
+let lastKeyPress = { key: null, time: 0 };
+
+const isDoublePress = (key) => {
+  const now = Date.now();
+  const isDouble =
+    key === lastKeyPress.key && now - lastKeyPress.time < DOUBLE_PRESS_DELAY;
+  lastKeyPress = { key, time: now };
+  return isDouble;
+};
+
 const init = async () => {
   try {
     initMidi();
@@ -20,7 +31,6 @@ const init = async () => {
     await registerAbletonListeners();
     const mixManager = new AbletonMixManager('./mixtape.json');
     let isBlocked = false;
-    // logCurrentState();
 
     initKeys(async (key) => {
       key = key.toLowerCase();
@@ -35,22 +45,44 @@ const init = async () => {
       }
 
       if (isBlocked) {
-        // Ignore other keys if isBlocked is true
         return;
       }
 
+      if (key === 'a' || key === 'c') {
+        const doublePress = isDoublePress(key);
+        if (!doublePress) {
+          setTimeout(async () => {
+            if (lastKeyPress.key === key && !isDoublePress(key)) {
+              if (key === 'a') {
+                // Single press 'a'
+                handleSceneChange({ state, direction: +1 });
+              } else if (key === 'c') {
+                // Single press 'c'
+                await ableton.song.duplicateScene(state.selectedSceneIndex);
+                const selectedScene = await ableton.song.view.get(
+                  'selected_scene'
+                );
+                selectedScene.fire();
+                console.log('- duplicated scene');
+              }
+            }
+          }, DOUBLE_PRESS_DELAY);
+        } else {
+          if (key === 'a') {
+            // Double press 'a'
+            handleSceneChange({ state, direction: -1 });
+          } else if (key === 'c') {
+            // Double press 'c'
+            // Add your logic here for double press 'c'
+          }
+        }
+        return;
+      }
+
+      // Immediate actions for other keys
       switch (key) {
-        case 'a':
-          handleSceneChange({ state, direction: -1 });
-          break;
         case 'b':
           handleSceneChange({ state, direction: 1 });
-          break;
-        case 'c':
-          await ableton.song.duplicateScene(state.selectedSceneIndex);
-          const selectedScene = await ableton.song.view.get('selected_scene');
-          selectedScene.fire();
-          console.log('- duplicated scene');
           break;
         case 'k': {
           const [trackKey, trackType] = state.selectedTrackName.split('-');
@@ -75,12 +107,12 @@ const init = async () => {
           if (!matchingOutputTracks.length) {
             console.log('- out of tracks, making a new one');
             await ableton.song.duplicateTrack(state.selectedTrackIndex);
-            const highlightedClipSlot = await ableton.song.view.get(
+            const newHighlightedClipSlot = await ableton.song.view.get(
               'highlighted_clip_slot'
             );
 
-            if (highlightedClipSlot?.raw?.has_clip) {
-              await highlightedClipSlot.deleteClip();
+            if (newHighlightedClipSlot?.raw?.has_clip) {
+              await newHighlightedClipSlot.deleteClip();
               const selectedTrack = await ableton.song.view.get(
                 'selected_track'
               );
@@ -100,8 +132,7 @@ const init = async () => {
           await newHighlightedClipSlot.fire();
           break;
         }
-
-        case 'n':
+        case 'n': {
           const highlightedClipSlot = await ableton.song.view.get(
             'highlighted_clip_slot'
           );
@@ -111,6 +142,7 @@ const init = async () => {
           }
 
           break;
+        }
 
         case '0':
           await mixManager.saveMix(ableton);
