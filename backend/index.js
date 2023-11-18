@@ -85,51 +85,7 @@ const init = async () => {
           handleSceneChange({ state, direction: 1 });
           break;
         case 'k': {
-          const [trackKey, trackType] = state.selectedTrackName.split('-');
-          const highlightedClipSlot = await ableton.song.view.get(
-            'highlighted_clip_slot'
-          );
-
-          if (
-            highlightedClipSlot.raw.is_recording ||
-            (!highlightedClipSlot.raw.has_clip &&
-              trackType === TRACK_TYPES.RENDER)
-          ) {
-            await highlightedClipSlot.fire();
-            return;
-          }
-
-          const matchingOutputTracks = await findMatchingOutputTracks({
-            state,
-            trackKey,
-          });
-
-          if (!matchingOutputTracks.length) {
-            console.log('- out of tracks, making a new one');
-            await ableton.song.duplicateTrack(state.selectedTrackIndex);
-            const newHighlightedClipSlot = await ableton.song.view.get(
-              'highlighted_clip_slot'
-            );
-
-            if (newHighlightedClipSlot?.raw?.has_clip) {
-              await newHighlightedClipSlot.deleteClip();
-              const selectedTrack = await ableton.song.view.get(
-                'selected_track'
-              );
-              await selectedTrack.set('arm', true);
-            }
-            return;
-          }
-
-          const firstEmptyTrack = matchingOutputTracks[0];
-          await ableton.song.view.set('selected_track', firstEmptyTrack.raw.id);
-          const selectedTrack = await ableton.song.view.get('selected_track');
-          await selectedTrack.set('arm', true);
-
-          const newHighlightedClipSlot = await ableton.song.view.get(
-            'highlighted_clip_slot'
-          );
-          await newHighlightedClipSlot.fire();
+          await triggerRecord(state, ableton);
           break;
         }
         case 'n': {
@@ -181,6 +137,51 @@ const init = async () => {
   } catch (e) {
     console.error(e);
   }
+};
+
+const triggerRecord = async (state, ableton) => {
+  const [trackKey, trackType] = state.selectedTrackName.split('-');
+  const highlightedClipSlot = await ableton.song.view.get(
+    'highlighted_clip_slot'
+  );
+
+  if (
+    highlightedClipSlot.raw.is_recording ||
+    (!highlightedClipSlot.raw.has_clip && trackType === TRACK_TYPES.RENDER)
+  ) {
+    await highlightedClipSlot.fire();
+    return;
+  }
+
+  const matchingOutputTracks = await findMatchingOutputTracks({
+    state,
+    trackKey,
+  });
+
+  if (!matchingOutputTracks.length) {
+    console.log('- out of tracks, making a new one');
+    await ableton.song.duplicateTrack(state.selectedTrackIndex);
+    const newHighlightedClipSlot = await ableton.song.view.get(
+      'highlighted_clip_slot'
+    );
+
+    if (newHighlightedClipSlot?.raw?.has_clip) {
+      await newHighlightedClipSlot.deleteClip();
+      const selectedTrack = await ableton.song.view.get('selected_track');
+      await selectedTrack.set('arm', true);
+    }
+    return;
+  }
+
+  const firstEmptyTrack = matchingOutputTracks[0];
+  await ableton.song.view.set('selected_track', firstEmptyTrack.raw.id);
+  const selectedTrack = await ableton.song.view.get('selected_track');
+  await selectedTrack.set('arm', true);
+
+  const newHighlightedClipSlot = await ableton.song.view.get(
+    'highlighted_clip_slot'
+  );
+  await newHighlightedClipSlot.fire();
 };
 
 init();
