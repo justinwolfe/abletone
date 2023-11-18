@@ -18,18 +18,19 @@ const getRecordingStatus = (number: number) => {
 };
 
 const CenterCardUI = styled(Paper)`
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 60px;
   padding: 30px;
 `;
 
 const TrackCardUI = styled(Paper)`
-  font-size: 30px;
+  font-size: 50px;
   text-align: center;
-  padding-left: 30px;
-  padding-right: 27px;
+  padding-left: 120px;
+  padding-right: 120px;
   padding-top: 10px;
   padding-bottom: 10px;
+  margin-top: 10px;
   margin-bottom: 30px;
   border-radius: 5px;
 `;
@@ -59,6 +60,25 @@ const ConnectedUI = styled.div`
   right: 0;
   margin: 2px;
   font-size: 12px;
+`;
+
+const MetaUI = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 20px;
+`;
+
+const TrackRowUI = styled.div`
+  margin-top: 30px;
+  display: flex;
+  gap: 20px;
+  width: 80%;
+`;
+
+const TrackSlotUI = styled(Paper)`
+  height: 100px;
+  width: 100px;
 `;
 
 function App() {
@@ -115,12 +135,24 @@ function App() {
         <ConnectedUI>
           <div>connection status: {connectionStatus}</div>
         </ConnectedUI>
-
+      </CenterCardUI>
+      <TrackRowUI>
+        <TrackSlotUI></TrackSlotUI>
+        <TrackSlotUI></TrackSlotUI>
+        <TrackSlotUI></TrackSlotUI>
+        <TrackSlotUI></TrackSlotUI>
+        <TrackSlotUI></TrackSlotUI>
+        <TrackSlotUI></TrackSlotUI>
+        <TrackSlotUI></TrackSlotUI>
+        <TrackSlotUI></TrackSlotUI>
+      </TrackRowUI>
+      <MetaUI>
+        {' '}
         <div>SCENE: {selectedSceneIndex}</div>
         <div>recording: {getRecordingStatus(isRecording)}</div>
         <div>playing: {isPlaying}</div>
         <div>songTime: {songTime}</div>
-      </CenterCardUI>
+      </MetaUI>
     </BackdropUI>
   );
 }
