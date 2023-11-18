@@ -3,7 +3,6 @@ import './App.css';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
-import classnames from 'classnames';
 import classNames from 'classnames';
 
 const getRecordingStatus = (number: number) => {
