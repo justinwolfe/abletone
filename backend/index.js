@@ -50,6 +50,7 @@ const init = async () => {
                 // Single press 'a'
                 await handleSceneChange({ state, direction: +1 });
               } else if (key === 'c') {
+                // Single press 'c'
                 await stopClip({ state, ableton });
               }
             }
