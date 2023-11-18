@@ -41,7 +41,10 @@ const unsubscribeFromStateChanges = (callback) => {
   }
 };
 
+const getState = () => state;
+
 export {
+  getState,
   state,
   logCurrentState,
   subscribeToStateChanges,

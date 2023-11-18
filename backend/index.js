@@ -2,7 +2,7 @@
 import initKeys from './keys.js';
 import initMidi from './midi.js';
 import { ableton, registerAbletonListeners } from './abletonListeners.js';
-import { state, logCurrentState } from './state.js';
+import { logCurrentState, getState } from './state.js';
 import { handleSceneChange, selectMonitorTrack } from './sceneTrackLogic.js';
 import AbletonMixManager from './mix.js';
 import { initServer } from './server.js';
@@ -29,6 +29,7 @@ const init = async () => {
     let isBlocked = false;
 
     initKeys(async (key) => {
+      const state = getState();
       key = key.toLowerCase();
 
       if (key === 'forward slash') {
