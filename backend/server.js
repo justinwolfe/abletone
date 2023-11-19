@@ -25,7 +25,7 @@ const getSerializableState = async (state) => {
       color: new Color(track.raw.color).hex,
       isGroup: type.trim() === 'g',
       isMonitor: type.trim() === 'm',
-      isTrack: type.trim() === 't',
+      isRender: type.trim() === 'r',
       clipSlots: clipSlots.map((clipSlot, i) => {
         return {
           index: i,
@@ -46,6 +46,7 @@ const getSerializableState = async (state) => {
     selectedSceneIndex: state.selectedSceneIndex,
     selectedTrackIndex: state.selectedTrackIndex,
     selectedTrackName: state.selectedTrackName,
+    selectedGroup: state.selectedTrackName.split('-')?.[0],
     isRecording: state.isRecording,
     isPlaying: state.isPlaying,
     songTime: state.songTime,

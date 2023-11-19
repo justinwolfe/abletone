@@ -1,10 +1,36 @@
 import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
 
+const commonWidth = '60vw';
+const gapWidthPercentage = 2; // The percentage of the gap relative to the commonWidth
+const numberOfGaps = 3; // Since we want 4 slots, there will be 3 gaps in between
+const gapWidth = `calc(${commonWidth} * ${gapWidthPercentage / 100})`; // The width of a single gap
+const totalGapWidth = `calc(${gapWidth} * ${numberOfGaps})`; // Total width of all gaps
+const trackSlotBaseWidth = `calc((${commonWidth} - ${totalGapWidth}) / 4)`; // The base width for each TrackSlotUI without padding or border
+
+export const TrackSlotUI = styled(Paper)`
+  height: 100px;
+  width: ${trackSlotBaseWidth};
+  box-sizing: border-box; // Include padding and border in the element's width
+  padding: 10px; // Example padding
+  border: 1px solid #ccc; // Example border
+  margin-right: -1px; // Adjust for the border overlap
+`;
+
+export const TrackRowUI = styled.div`
+  margin-top: 30px;
+  display: flex;
+  gap: ${gapWidth};
+  width: ${commonWidth};
+  flex-wrap: wrap;
+  box-sizing: border-box;
+`;
+
 export const CenterCardUI = styled(Paper)`
-  width: 600px;
-  height: 60px;
+  width: ${commonWidth};
+  height: 100px;
   padding: 30px;
+  box-sizing: border-box;
 `;
 
 export const TrackCardUI = styled(Paper)`
@@ -53,16 +79,4 @@ export const MetaUI = styled.div`
   margin: 20px;
 `;
 
-export const TrackRowUI = styled.div`
-  margin-top: 30px;
-  display: flex;
-  gap: 20px;
-  width: 80%;
-  flex-wrap: wrap;
-`;
-
-export const TrackSlotUI = styled(Paper)`
-  height: 100px;
-  width: 100px;
-  flex-shrink: 0;
-`;
+export const WrapperUI = styled.div``;

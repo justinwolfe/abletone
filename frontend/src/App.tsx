@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
@@ -11,6 +11,7 @@ import {
   MetaUI,
   BackdropUI,
   TrackSlotUI,
+  WrapperUI,
 } from './App.css.ts';
 import { getRecordingStatus } from './app.utils';
 
@@ -43,18 +44,39 @@ function App() {
     setApiState(newData);
   }, [lastMessage]);
 
-  if (Object.keys(apiState).length === 0) {
-    return null;
-  }
-
   const {
     selectedSceneIndex,
     selectedTrackIndex,
     selectedTrackName,
+    selectedGroup,
     isRecording,
     isPlaying,
     songTime,
+    tracks,
   } = apiState;
+
+  const tracksForSelectedGroup = useMemo(() => {
+    if (!selectedGroup || !tracks?.length) {
+      return [];
+    }
+
+    const renderTracksForGroup = tracks.filter(
+      (track) => track.group === selectedGroup
+    );
+
+    return renderTracksForGroup;
+  }, [selectedGroup, tracks]);
+
+  const renderTracksForSelectedGroup = useMemo(
+    () => tracksForSelectedGroup.filter((track) => track.isRender),
+    [tracksForSelectedGroup]
+  );
+
+  console.log(renderTracksForSelectedGroup);
+
+  if (Object.keys(apiState).length === 0) {
+    return null;
+  }
 
   return (
     <BackdropUI
@@ -66,21 +88,18 @@ function App() {
       <TrackCardUI>
         <div>{selectedTrackName}</div>
       </TrackCardUI>
-      <CenterCardUI>
-        <ConnectedUI>
-          <div>connection status: {connectionStatus}</div>
-        </ConnectedUI>
-      </CenterCardUI>
-      <TrackRowUI>
-        <TrackSlotUI></TrackSlotUI>
-        <TrackSlotUI></TrackSlotUI>
-        <TrackSlotUI></TrackSlotUI>
-        <TrackSlotUI></TrackSlotUI>
-        <TrackSlotUI></TrackSlotUI>
-        <TrackSlotUI></TrackSlotUI>
-        <TrackSlotUI></TrackSlotUI>
-        <TrackSlotUI></TrackSlotUI>
-      </TrackRowUI>
+      <WrapperUI>
+        <CenterCardUI>
+          <ConnectedUI>
+            <div>connection status: {connectionStatus}</div>
+          </ConnectedUI>
+        </CenterCardUI>
+        <TrackRowUI>
+          {renderTracksForSelectedGroup.map((track) => {
+            return <TrackSlotUI />;
+          })}
+        </TrackRowUI>
+      </WrapperUI>
       <MetaUI>
         <div>SCENE: {selectedSceneIndex}</div>
         <div>recording: {getRecordingStatus(isRecording)}</div>
