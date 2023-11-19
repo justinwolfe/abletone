@@ -30,10 +30,10 @@ const getSerializableState = async (state) => {
         return {
           index: i,
           id: clipSlot.raw.id,
-          has_clip: clipSlot.raw.has_clip,
-          is_playing: clipSlot.raw.is_playing,
-          is_recording: clipSlot.raw.is_recording,
-          is_triggered: clipSlot.raw.is_triggered,
+          hasClip: clipSlot.raw.has_clip,
+          isPlaying: clipSlot.raw.is_playing,
+          isRecording: clipSlot.raw.is_recording,
+          isTriggered: clipSlot.raw.is_triggered,
         };
       }),
     };

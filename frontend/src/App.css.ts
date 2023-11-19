@@ -1,5 +1,6 @@
 import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
+import { PlayArrowOutlined, Square } from '@mui/icons-material';
 
 const commonWidth = '60vw';
 const gapWidthPercentage = 2; // The percentage of the gap relative to the commonWidth
@@ -15,6 +16,9 @@ export const TrackSlotUI = styled(Paper)`
   padding: 10px; // Example padding
   border: 1px solid #ccc; // Example border
   margin-right: -1px; // Adjust for the border overlap
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const TrackRowUI = styled.div`
@@ -80,3 +84,6 @@ export const MetaUI = styled.div`
 `;
 
 export const WrapperUI = styled.div``;
+
+export const PlayArrowUI = styled(PlayArrowOutlined)``;
+export const StopUI = styled(Square)``;

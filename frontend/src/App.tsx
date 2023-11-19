@@ -12,6 +12,8 @@ import {
   BackdropUI,
   TrackSlotUI,
   WrapperUI,
+  PlayArrowUI,
+  StopUI,
 } from './App.css.ts';
 import { getRecordingStatus } from './app.utils';
 
@@ -96,7 +98,20 @@ function App() {
         </CenterCardUI>
         <TrackRowUI>
           {renderTracksForSelectedGroup.map((track) => {
-            return <TrackSlotUI />;
+            console.log(renderTracksForSelectedGroup, selectedSceneIndex);
+            const clipSlot = track?.clipSlots[selectedSceneIndex];
+
+            if (!clipSlot) {
+              return 'error';
+            }
+
+            const { hasClip, isPlaying } = clipSlot;
+            return (
+              <TrackSlotUI key={track?.id}>
+                {hasClip && !isPlaying && <PlayArrowUI />}
+                {hasClip && isPlaying && <StopUI />}
+              </TrackSlotUI>
+            );
           })}
         </TrackRowUI>
       </WrapperUI>
