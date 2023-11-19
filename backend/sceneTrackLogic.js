@@ -1,8 +1,7 @@
 const TRACK_TYPES = {
   MONITOR: 'm',
   GROUP: 'g',
-  TEMPLATE: 't',
-  RENDER: 't',
+  RENDER: 'r',
 };
 
 async function handleSceneChange({ state, direction }) {
