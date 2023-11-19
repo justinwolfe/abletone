@@ -81,38 +81,35 @@ const init = async () => {
         }
         case 'n': {
           await deleteClip({ state, ableton });
-
           break;
         }
 
-        case '0':
+        case '9':
           await mixManager.saveMix(ableton);
           break;
-
-        case '1':
+        case '0':
           await mixManager.restoreMix(ableton);
           break;
 
+        case '1':
+          await selectMonitorTrack({ state, ableton, groupName: 'drums' });
+          break;
         case '2': {
           await selectMonitorTrack({ state, ableton, groupName: 'keys1' });
           break;
         }
-
         case '3': {
           await selectMonitorTrack({ state, ableton, groupName: 'keys2' });
           break;
         }
-
         case '4': {
           await selectMonitorTrack({ state, ableton, groupName: 'git' });
           break;
         }
-
         case '5': {
           await selectMonitorTrack({ state, ableton, groupName: 'vox1' });
           break;
         }
-
         case '6': {
           await selectMonitorTrack({ state, ableton, groupName: 'vox2' });
           break;
