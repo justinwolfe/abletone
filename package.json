@@ -19,5 +19,8 @@
   "homepage": "https://github.com/justinwolfe/abletone#readme",
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "nodemon": "^3.0.1"
   }
 }

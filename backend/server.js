@@ -6,8 +6,29 @@ import {
   subscribeToStateChanges,
   unsubscribeFromStateChanges,
 } from './state.js';
+import { Color } from 'ableton-js/util/color.js';
 
 const getSerializableState = (state) => {
+  const serializableTracks = state.tracks
+    .map((track) => {
+      const [key, type] = track.raw.name.split('-');
+
+      if (!key || !type) {
+        return false;
+      }
+
+      return {
+        id: track.raw.id,
+        name: track.raw.name,
+        group: track.raw.name.split('-')?.[0].trim(),
+        color: new Color(track.raw.color).hex,
+        isGroup: type.trim() === 'g',
+        isMonitor: type.trim() === 'm',
+        isTrack: type.trim() === 't',
+      };
+    })
+    .filter(Boolean);
+
   return {
     selectedSceneIndex: state.selectedSceneIndex,
     selectedTrackIndex: state.selectedTrackIndex,
@@ -15,6 +36,7 @@ const getSerializableState = (state) => {
     isRecording: state.isRecording,
     isPlaying: state.isPlaying,
     songTime: state.songTime,
+    tracks: serializableTracks,
   };
 };
 

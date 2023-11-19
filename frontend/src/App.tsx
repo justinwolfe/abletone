@@ -74,11 +74,13 @@ const TrackRowUI = styled.div`
   display: flex;
   gap: 20px;
   width: 80%;
+  flex-wrap: wrap;
 `;
 
 const TrackSlotUI = styled(Paper)`
   height: 100px;
   width: 100px;
+  flex-shrink: 0;
 `;
 
 function App() {
@@ -93,6 +95,8 @@ function App() {
     [ReadyState.CLOSED]: 'closed',
     [ReadyState.UNINSTANTIATED]: 'uninstantiated',
   }[readyState];
+
+  console.log(apiState);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const sendToApi = (message: string) => {
