@@ -19,8 +19,9 @@ const isDoublePress = (key) => {
   return isDouble;
 };
 
-const handleMessage = (message, ws) => {
+const handleMessage = async (message, ws) => {
   const parsedMessage = JSON.parse(message);
+  // await ableton.song.stopAllClips();
   console.log(parsedMessage);
 };
 
@@ -77,9 +78,10 @@ const init = async () => {
 
       // Immediate actions for other keys
       switch (key) {
-        case 'b':
+        case 'b': {
           await triggerRecord({ state, ableton });
           break;
+        }
         case 'k': {
           await triggerRecord({ state, ableton });
           break;
