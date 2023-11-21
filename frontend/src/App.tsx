@@ -37,6 +37,16 @@ function App() {
     sendMessage(JSON.stringify({ foo: 'bar' }));
   };
 
+  const persistMixPrint = () => sendToApi({ type: 'PERSIST_MIXPRINT' });
+  const restoreMixPrint = () => sendToApi({ type: 'RESTORE_MIXPRINT' });
+  const toggleClip = (clipSlotId) =>
+    sendToApi({
+      type: 'TOGGLE_CLIP_SLOT',
+      payload: { clipSlotId: '' },
+    });
+  const goToPreviousGroup = () => sendToApi({ type: 'DECREMENT_GROUP' });
+  const goToNextGroup = () => sendToApi({ type: 'INCREMENT_GROUP' });
+
   useEffect(() => {
     if (!lastMessage?.data) {
       return;
@@ -119,7 +129,7 @@ function App() {
           })}
         </TrackRowUI>
       </WrapperUI>
-      <MetaUI onClick={sendToApi}>
+      <MetaUI>
         <div>SCENE: {selectedSceneIndex}</div>
         <div>recording: {getRecordingStatus(isRecording)}</div>
         <div>playing: {isPlaying}</div>
