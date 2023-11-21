@@ -21,7 +21,7 @@ export const TrackSlotUI = styled(Paper)`
   justify-content: center;
 
   &.isSelected {
-    background-color: black;
+    border: 4px solid #b5b4b4;
   }
 `;
 

@@ -69,15 +69,25 @@ const initServer = async () => {
   });
 
   wss.on('connection', async (ws) => {
-    ws.send(JSON.stringify(await getSerializableState(state)));
+    const sendState = async () => {
+      ws.send(JSON.stringify(await getSerializableState(state)));
+    };
 
-    const stateChangeHandler = async (newState) => {
-      ws.send(JSON.stringify(await getSerializableState(newState)));
+    // Send initial state
+    sendState();
+
+    // Set an interval to send state every 200 milliseconds
+    const intervalId = setInterval(sendState, 200);
+
+    const stateChangeHandler = async () => {
+      sendState();
     };
 
     subscribeToStateChanges(stateChangeHandler);
 
     ws.on('close', () => {
+      // Clear the interval when the connection is closed
+      clearInterval(intervalId);
       unsubscribeFromStateChanges(stateChangeHandler);
     });
   });

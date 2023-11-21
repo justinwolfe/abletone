@@ -75,8 +75,6 @@ function App() {
     [tracksForSelectedGroup]
   );
 
-  console.log(renderTracksForSelectedGroup);
-
   if (Object.keys(apiState).length === 0) {
     return null;
   }
@@ -99,7 +97,6 @@ function App() {
         </CenterCardUI>
         <TrackRowUI>
           {renderTracksForSelectedGroup.map((track) => {
-            console.log(renderTracksForSelectedGroup, selectedSceneIndex);
             const clipSlot = track?.clipSlots[selectedSceneIndex];
 
             if (!clipSlot) {
@@ -110,12 +107,9 @@ function App() {
 
             const isSelected = track.id === selectedTrackId;
 
-            console.log('isSelected', isSelected);
-
             return (
               <TrackSlotUI
-                key={track?.id}
-                isSelected={isSelected}
+                key={track.id}
                 className={classNames(isSelected && 'isSelected')}
               >
                 {hasClip && !isPlaying && <PlayArrowUI />}
