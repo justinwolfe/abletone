@@ -42,15 +42,27 @@ export const CenterCardUI = styled(Paper)`
 `;
 
 export const TrackCardUI = styled(Paper)`
+  width: ${commonWidth};
   font-size: 50px;
   text-align: center;
-  padding-left: 120px;
-  padding-right: 120px;
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top: 10px;
   margin-bottom: 30px;
   border-radius: 5px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+export const TrackNavButtonUI = styled.button`
+  padding: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+`;
+
+export const DecrementTrackButton = styled(TrackNavButtonUI)`
+  padd
 `;
 
 export const BackdropUI = styled.div`

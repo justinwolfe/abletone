@@ -5,6 +5,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 import classNames from 'classnames';
 import {
   TrackCardUI,
+  TrackNavButtonUI,
   CenterCardUI,
   ConnectedUI,
   TrackRowUI,
@@ -97,7 +98,9 @@ function App() {
       )}
     >
       <TrackCardUI>
+        <TrackNavButtonUI>a</TrackNavButtonUI>
         <div>{selectedTrackName}</div>
+        <TrackNavButtonUI>b</TrackNavButtonUI>
       </TrackCardUI>
       <WrapperUI>
         <CenterCardUI>
