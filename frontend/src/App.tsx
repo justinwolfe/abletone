@@ -34,7 +34,7 @@ function App() {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const sendToApi = (message: string) => {
-    sendMessage(JSON.stringify('phone home'));
+    sendMessage(JSON.stringify({ foo: 'bar' }));
   };
 
   useEffect(() => {
@@ -119,7 +119,7 @@ function App() {
           })}
         </TrackRowUI>
       </WrapperUI>
-      <MetaUI>
+      <MetaUI onClick={sendToApi}>
         <div>SCENE: {selectedSceneIndex}</div>
         <div>recording: {getRecordingStatus(isRecording)}</div>
         <div>playing: {isPlaying}</div>

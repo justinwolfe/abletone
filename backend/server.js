@@ -56,7 +56,7 @@ const getSerializableState = async (state) => {
   };
 };
 
-const initServer = async () => {
+const initServer = async (onMessage) => {
   const app = express();
   const server = http.createServer(app);
 
@@ -84,6 +84,12 @@ const initServer = async () => {
     };
 
     subscribeToStateChanges(stateChangeHandler);
+
+    if (onMessage) {
+      ws.on('message', (message) => {
+        onMessage(message, ws);
+      });
+    }
 
     ws.on('close', () => {
       // Clear the interval when the connection is closed

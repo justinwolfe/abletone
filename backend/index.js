@@ -19,12 +19,17 @@ const isDoublePress = (key) => {
   return isDouble;
 };
 
+const handleMessage = (message, ws) => {
+  const parsedMessage = JSON.parse(message);
+  console.log(parsedMessage);
+};
+
 const init = async () => {
   try {
     initMidi();
-    await initServer();
     await ableton.start();
     await registerAbletonListeners();
+    await initServer(handleMessage); // Pass the handleMessage function
     const mixManager = new AbletonMixManager('./mixtape.json');
     let isBlocked = false;
 
