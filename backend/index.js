@@ -21,6 +21,17 @@ const isDoublePress = (key) => {
 
 const handleMessage = async (message, ws) => {
   const parsedMessage = JSON.parse(message);
+  const { type, payload } = parsedMessage;
+  const state = getState();
+
+  switch (type) {
+    case 'INCREMENT_GROUP':
+      break;
+    case 'DECREMENT_SCENE':
+      break;
+    default:
+      break;
+  }
   // await ableton.song.stopAllClips();
   console.log(parsedMessage);
 };

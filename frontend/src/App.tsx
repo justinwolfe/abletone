@@ -15,8 +15,10 @@ import {
   WrapperUI,
   PlayArrowUI,
   StopUI,
+  IconUI,
 } from './App.css.ts';
 import { getRecordingStatus } from './app.utils';
+import { Icon } from '@mui/material';
 
 function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
@@ -34,8 +36,8 @@ function App() {
   console.log(apiState);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const sendToApi = (message: string) => {
-    sendMessage(JSON.stringify({ foo: 'bar' }));
+  const sendToApi = (message: any) => {
+    sendMessage(JSON.stringify(message));
   };
 
   const persistMixPrint = () => sendToApi({ type: 'PERSIST_MIXPRINT' });
@@ -98,9 +100,13 @@ function App() {
       )}
     >
       <TrackCardUI>
-        <TrackNavButtonUI>a</TrackNavButtonUI>
+        <TrackNavButtonUI onClick={goToPreviousGroup}>
+          <Icon>navigate_before</Icon>
+        </TrackNavButtonUI>
         <div>{selectedTrackName}</div>
-        <TrackNavButtonUI>b</TrackNavButtonUI>
+        <TrackNavButtonUI onClick={goToNextGroup}>
+          <Icon>navigate_next</Icon>
+        </TrackNavButtonUI>
       </TrackCardUI>
       <WrapperUI>
         <CenterCardUI>

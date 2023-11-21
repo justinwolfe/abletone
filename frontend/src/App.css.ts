@@ -1,6 +1,7 @@
 import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
 import { PlayArrowOutlined, Square } from '@mui/icons-material';
+import Icon from '@mui/material/Icon';
 
 const commonWidth = '60vw';
 const gapWidthPercentage = 2; // The percentage of the gap relative to the commonWidth
@@ -103,3 +104,5 @@ export const WrapperUI = styled.div``;
 
 export const PlayArrowUI = styled(PlayArrowOutlined)``;
 export const StopUI = styled(Square)``;
+
+export const IconUI = styled(Icon)``;
