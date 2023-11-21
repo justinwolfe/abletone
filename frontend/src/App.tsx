@@ -50,6 +50,7 @@ function App() {
     selectedSceneIndex,
     selectedTrackIndex,
     selectedTrackName,
+    selectedTrackId,
     selectedGroup,
     isRecording,
     isPlaying,
@@ -106,8 +107,17 @@ function App() {
             }
 
             const { hasClip, isPlaying } = clipSlot;
+
+            const isSelected = track.id === selectedTrackId;
+
+            console.log('isSelected', isSelected);
+
             return (
-              <TrackSlotUI key={track?.id}>
+              <TrackSlotUI
+                key={track?.id}
+                isSelected={isSelected}
+                className={classNames(isSelected && 'isSelected')}
+              >
                 {hasClip && !isPlaying && <PlayArrowUI />}
                 {hasClip && isPlaying && <StopUI />}
               </TrackSlotUI>

@@ -19,6 +19,10 @@ export const TrackSlotUI = styled(Paper)`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &.isSelected {
+    background-color: black;
+  }
 `;
 
 export const TrackRowUI = styled.div`

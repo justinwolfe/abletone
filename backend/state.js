@@ -5,7 +5,7 @@ const baseState = {
   selectedTrackIndex: undefined,
   selectedSceneId: undefined,
   selectedTrackName: undefined,
-  selectedTrackid: undefined,
+  selectedTrackId: undefined,
   isRecording: false,
   isPlaying: false,
 };
