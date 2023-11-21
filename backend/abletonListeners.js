@@ -23,6 +23,7 @@ const registerAbletonListeners = async () => {
     initialSelectedScene.raw.id,
     state.scenes
   );
+  state.selectedSceneId = initialSelectedScene.raw.id;
 
   const initialSelectedTrack = await ableton.song.view.get('selected_track');
   state.selectedTrackIndex = getIndexByRawId(
@@ -30,6 +31,7 @@ const registerAbletonListeners = async () => {
     state.tracks
   );
   state.selectedTrackName = initialSelectedTrack.raw.name;
+  state.selectedTrackId = initialSelectedTrack.raw.id;
 
   ableton.song.addListener('tracks', async (t) => {
     state.tracks = t;

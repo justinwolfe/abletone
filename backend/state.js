@@ -3,7 +3,9 @@ const baseState = {
   tracks: [],
   selectedSceneIndex: undefined,
   selectedTrackIndex: undefined,
+  selectedSceneId: undefined,
   selectedTrackName: undefined,
+  selectedTrackid: undefined,
   isRecording: false,
   isPlaying: false,
 };

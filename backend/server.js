@@ -44,8 +44,10 @@ const getSerializableState = async (state) => {
 
   return {
     selectedSceneIndex: state.selectedSceneIndex,
+    selectedSceneId: state.selectedSceneId,
     selectedTrackIndex: state.selectedTrackIndex,
     selectedTrackName: state.selectedTrackName,
+    selectedTrackId: state.selectedTrackId,
     selectedGroup: state.selectedTrackName?.split('-')?.[0],
     isRecording: state.isRecording,
     isPlaying: state.isPlaying,
