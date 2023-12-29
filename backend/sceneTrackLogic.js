@@ -61,7 +61,7 @@ const selectMonitorTrack = async ({ state, ableton, groupName }) => {
 
 const selectTrack = async ({ state, ableton, trackKey }) => {
   const matchingTrack = state.tracks.find((track) => {
-    return track.name === trackKey;
+    return track.raw.name === trackKey;
   });
 
   if (!matchingTrack) {
