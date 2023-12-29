@@ -114,7 +114,7 @@ const init = async () => {
           break;
 
         case '1': {
-          await selectTrack({ state, ableton, groupName: 'drums' });
+          await selectTrack({ state, ableton, trackKey: 'drums' });
           break;
         }
 
