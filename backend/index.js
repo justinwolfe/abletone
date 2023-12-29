@@ -3,7 +3,11 @@ import initKeys from './keys.js';
 import initMidi from './midi.js';
 import { ableton, registerAbletonListeners } from './abletonListeners.js';
 import { logCurrentState, getState } from './state.js';
-import { handleSceneChange, selectMonitorTrack } from './sceneTrackLogic.js';
+import {
+  handleSceneChange,
+  selectMonitorTrack,
+  selectTrack,
+} from './sceneTrackLogic.js';
 import AbletonMixManager from './mix.js';
 import { initServer } from './server.js';
 import { stopClip, deleteClip, triggerRecord } from './abletonHandlers.js';
@@ -110,7 +114,7 @@ const init = async () => {
           break;
 
         case '1': {
-          await selectMonitorTrack({ state, ableton, groupName: 'drums' });
+          await selectTrack({ state, ableton, groupName: 'drums' });
           break;
         }
 

@@ -59,9 +59,22 @@ const selectMonitorTrack = async ({ state, ableton, groupName }) => {
   await ableton.song.view.set('selected_track', monitorTrack.raw.id);
 };
 
+const selectTrack = async ({ state, ableton, trackKey }) => {
+  const matchingTrack = state.tracks.find((track) => {
+    return track.name === trackKey;
+  });
+
+  if (!matchingTrack) {
+    return;
+  }
+
+  await ableton.song.view.set('selected_track', matchingTrack.raw.id);
+};
+
 export {
   handleSceneChange,
   findMatchingOutputTracks,
   selectMonitorTrack,
+  selectTrack,
   TRACK_TYPES,
 };
