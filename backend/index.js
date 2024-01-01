@@ -65,17 +65,20 @@ const init = async () => {
         return;
       }
 
-      if (key === 'a' || key === 'c') {
+      if (key === 'a' || key === 'b' || key === 'c') {
         const doublePress = isDoublePress(key);
         if (!doublePress) {
           setTimeout(async () => {
             if (lastKeyPress.key === key && !isDoublePress(key)) {
               if (key === 'a') {
                 // Single press 'a'
+                await handleSceneChange({ state, direction: -1 });
+              } else if (key === 'b') {
+                // Single press 'b'
                 await handleSceneChange({ state, direction: +1 });
               } else if (key === 'c') {
                 // Single press 'c'
-                await stopClip({ state, ableton });
+                await triggerRecord({ state, ableton });
               }
             }
           }, DOUBLE_PRESS_DELAY);
@@ -83,6 +86,9 @@ const init = async () => {
           if (key === 'a') {
             // Double press 'a'
             await handleSceneChange({ state, direction: -1 });
+          } else if (key === 'b') {
+            // Double press 'b
+            await ableton.song.duplicateScene(state.selectedSceneIndex);
           } else if (key === 'c') {
             // Double press 'c'
             await deleteClip({ state, ableton });
@@ -93,10 +99,6 @@ const init = async () => {
 
       // Immediate actions for other keys
       switch (key) {
-        case 'b': {
-          await triggerRecord({ state, ableton });
-          break;
-        }
         case 'k': {
           await triggerRecord({ state, ableton });
           break;
@@ -105,7 +107,6 @@ const init = async () => {
           await deleteClip({ state, ableton });
           break;
         }
-
         case 'q':
           await mixManager.saveMix(ableton);
           break;
