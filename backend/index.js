@@ -85,7 +85,7 @@ const init = async () => {
         } else {
           if (key === 'a') {
             // Double press 'a'
-            await handleSceneChange({ state, direction: -1 });
+            await ableton.song.stopAllClips();
           } else if (key === 'b') {
             // Double press 'b
             await ableton.song.duplicateScene(state.selectedSceneIndex);
