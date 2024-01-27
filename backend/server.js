@@ -1,6 +1,7 @@
 // server.js
 import express from 'express';
 import http from 'http';
+import net from 'net';
 import {
   state,
   subscribeToStateChanges,
@@ -56,15 +57,21 @@ const getSerializableState = async (state) => {
   };
 };
 
+let server;
+
 const initServer = async (onMessage) => {
+  if (server) {
+    server.close();
+  }
+
   const app = express();
-  const server = http.createServer(app);
+
+  server = http.createServer(app);
 
   const WebSocket = await import('ws');
   const wss = new WebSocket.WebSocketServer({ server });
 
   app.get('/state', async (req, res) => {
-    res.json();
     res.json(await getSerializableState(state));
   });
 
@@ -98,9 +105,21 @@ const initServer = async (onMessage) => {
     });
   });
 
-  server.listen(3000, () => {
-    console.log('Server listening on port 3000');
-  });
+  server
+    .listen(3005, () => {
+      console.log('Server listening on port 3005');
+    })
+    .on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error('Port 3005 is in use, retrying...');
+        setTimeout(() => {
+          server.close();
+          initServer(onMessage);
+        }, 1000); // wait 1 second before retrying
+      } else {
+        throw err;
+      }
+    });
 };
 
 export { initServer };
