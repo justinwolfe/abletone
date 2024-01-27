@@ -22,7 +22,7 @@ import { Icon } from '@mui/material';
 
 function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
-    'ws://localhost:3000/ws'
+    'ws://localhost:3005/ws'
   );
   const [apiState, setApiState] = useState({});
   const connectionStatus = {
