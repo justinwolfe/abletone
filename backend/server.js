@@ -58,14 +58,12 @@ const getSerializableState = async (state) => {
 };
 
 let server;
-
 const initServer = async (onMessage) => {
   if (server) {
     server.close();
   }
 
   const app = express();
-
   server = http.createServer(app);
 
   const WebSocket = await import('ws');
@@ -76,15 +74,22 @@ const initServer = async (onMessage) => {
   });
 
   wss.on('connection', async (ws) => {
+    let lastSentState = null; // Variable to store the last sent state
+
     const sendState = async () => {
-      ws.send(JSON.stringify(await getSerializableState(state)));
+      const currentState = await getSerializableState(state);
+      // Compare the current state with the last sent state before sending
+      if (JSON.stringify(currentState) !== JSON.stringify(lastSentState)) {
+        ws.send(JSON.stringify(currentState));
+        lastSentState = currentState; // Update last sent state
+      }
     };
 
     // Send initial state
     sendState();
 
-    // Set an interval to send state every 200 milliseconds
-    const intervalId = setInterval(sendState, 200);
+    // Set an interval to send state every 20 milliseconds
+    const intervalId = setInterval(sendState, 20);
 
     const stateChangeHandler = async () => {
       sendState();
