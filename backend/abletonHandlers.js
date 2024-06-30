@@ -46,7 +46,7 @@ export const toggleSend = async ({ state, ableton, trackKey }) => {
 
   console.log('has send', outputSend);
 
-  const currentValue = outputSend.raw.value;
+  const currentValue = outputSend?.raw?.value;
 
   console.log('current sendvalue', currentValue);
   console.log('new sendvalue', currentValue > 0 ? 1 : 0);
