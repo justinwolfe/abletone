@@ -25,7 +25,7 @@ const getSerializableState = async (state) => {
       send.raw.name.toLowerCase().includes('loops')
     );
 
-    const outputSendValue = outputSend.raw.value;
+    const outputSendValue = outputSend?.raw?.value || 0;
 
     return {
       id: track.raw.id,
