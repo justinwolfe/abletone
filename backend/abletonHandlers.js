@@ -31,6 +31,25 @@ export const duplicateScene = async ({ state, ableton }) => {
   console.log('- duplicated scene');
 };
 
+export const toggleSend = async ({ state, ableton }) => {
+  const track = state.tracks.find(
+    (track) => track.raw.name === state.selectedTrackName
+  );
+
+  if (!track) {
+    return console.log('no track found');
+  }
+
+  const mixerDevice = await track.get('mixer_device');
+  const sends = await mixerDevice.get('sends');
+  const outputSend = sends.find((send) =>
+    send.raw.name.toLowerCase().includes('loops')
+  );
+
+  const currentValue = outputSend.raw.value;
+  await outputSend.set('value', currentValue > 0 ? 0 : 1);
+};
+
 export const triggerRecord = async ({ state, ableton }) => {
   const [trackKey, trackType] = state.selectedTrackName.split('-');
   const highlightedClipSlot = await ableton.song.view.get(

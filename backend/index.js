@@ -10,7 +10,12 @@ import {
 } from './sceneTrackLogic.js';
 import AbletonMixManager from './mix.js';
 import { initServer } from './server.js';
-import { stopClip, deleteClip, triggerRecord } from './abletonHandlers.js';
+import {
+  stopClip,
+  deleteClip,
+  triggerRecord,
+  toggleSend,
+} from './abletonHandlers.js';
 
 const DOUBLE_PRESS_DELAY = 600; // milliseconds
 let lastKeyPress = { key: null, time: 0 };
@@ -107,6 +112,7 @@ const init = async () => {
           await deleteClip({ state, ableton });
           break;
         }
+
         case 'q':
           await mixManager.saveMix(ableton);
           break;
