@@ -44,12 +44,12 @@ export const toggleSend = async ({ state, ableton, trackKey }) => {
     send.raw.name.toLowerCase().includes('loops')
   );
 
-  console.log('has send', outputSend);
+  if (!outputSend) {
+    return console.log('no send found');
+  }
 
   const currentValue = outputSend?.raw?.value;
 
-  console.log('current sendvalue', currentValue);
-  console.log('new sendvalue', currentValue > 0 ? 1 : 0);
   await outputSend.set('value', currentValue > 0 ? 0 : 1);
 };
 
