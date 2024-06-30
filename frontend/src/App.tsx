@@ -94,6 +94,10 @@ function App() {
     return null;
   }
 
+  if (connectionStatus === 'closed') {
+    return null;
+  }
+
   return (
     <BackdropUI
       className={classNames(
@@ -103,9 +107,6 @@ function App() {
     >
       <WrapperUI>
         <CenterCardUI>
-          <ConnectedUI>
-            <div>connection status: {connectionStatus}</div>
-          </ConnectedUI>
           <Stack direction="row" spacing={1}>
             {renderTracks.map((trackToRender: any) => {
               return (
