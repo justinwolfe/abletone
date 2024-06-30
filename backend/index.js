@@ -29,6 +29,8 @@ const isDoublePress = (key) => {
 };
 
 const handleMessage = async (message, ws) => {
+  console.log(parsedMessage);
+
   const parsedMessage = JSON.parse(message);
   const { type, payload } = parsedMessage;
   const state = getState();
@@ -53,8 +55,6 @@ const handleMessage = async (message, ws) => {
     default:
       break;
   }
-  // await ableton.song.stopAllClips();
-  console.log(parsedMessage);
 };
 
 const init = async () => {
