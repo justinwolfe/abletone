@@ -89,6 +89,10 @@ function App() {
     return tracks?.filter((track: any) => !track.name.includes('r-'));
   }, [tracks]);
 
+  const monitorTracks = useMemo(() => {
+    return tracks?.filter((track: any) => track.name.includes('r-'));
+  }, [tracks]);
+
   if (Object.keys(apiState).length === 0) {
     return null;
   }
@@ -107,7 +111,7 @@ function App() {
     >
       <Stack direction="column" spacing={1}>
         <Stack direction="row" spacing={1}>
-          {renderTracks.map((trackToRender: any) => {
+          {monitorTracks.map((trackToRender: any) => {
             return (
               <Button
                 key={trackToRender.id}
