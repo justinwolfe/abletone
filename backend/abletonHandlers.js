@@ -31,10 +31,8 @@ export const duplicateScene = async ({ state, ableton }) => {
   console.log('- duplicated scene');
 };
 
-export const toggleSend = async ({ state, ableton }) => {
-  const track = state.tracks.find(
-    (track) => track.raw.name === state.selectedTrackName
-  );
+export const toggleSend = async ({ state, ableton, trackKey }) => {
+  const track = state.tracks.find((track) => track.raw.name === trackKey);
 
   if (!track) {
     return console.log('no track found');
