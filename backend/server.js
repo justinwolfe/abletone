@@ -11,12 +11,6 @@ import { Color } from 'ableton-js/util/color.js';
 
 const getSerializableState = async (state) => {
   const trackPromises = state.tracks.map(async (track) => {
-    const [key, type] = track.raw.name.split('-');
-
-    if (!key || !type) {
-      return false;
-    }
-
     const clipSlots = await track.get('clip_slots');
 
     const mixerDevice = await track.get('mixer_device');
@@ -32,9 +26,7 @@ const getSerializableState = async (state) => {
       name: track.raw.name,
       group: track.raw.name.split('-')?.[0].trim(),
       color: new Color(track.raw.color).hex,
-      isGroup: type.trim() === 'g',
-      isMonitor: type.trim() === 'm',
-      isRender: type.trim() === 'r',
+      isRender: track.raw.name.includes('r-'),
       recordSendEnabled: outputSendValue > 0 ? true : false,
       clipSlots: clipSlots.map((clipSlot, i) => {
         return {
