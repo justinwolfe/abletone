@@ -90,7 +90,7 @@ function App() {
   }, [tracks]);
 
   const monitorTracks = useMemo(() => {
-    return tracks?.filter((track: any) => track.name.includes('r-'));
+    return tracks?.filter((track: any) => !track.name.includes('r-'));
   }, [tracks]);
 
   if (Object.keys(apiState).length === 0) {
