@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 
 import classNames from 'classnames';
 import {
@@ -105,7 +106,7 @@ function App() {
           <ConnectedUI>
             <div>connection status: {connectionStatus}</div>
           </ConnectedUI>
-          <div>
+          <Stack direction="row" spacing={1}>
             {renderTracks.map((trackToRender: any) => {
               return (
                 <Button
@@ -127,7 +128,7 @@ function App() {
                 </Button>
               );
             })}
-          </div>
+          </Stack>
         </CenterCardUI>
 
         {/* <TrackRowUI>
