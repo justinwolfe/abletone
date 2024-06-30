@@ -29,9 +29,8 @@ const isDoublePress = (key) => {
 };
 
 const handleMessage = async (message, ws) => {
-  console.log(parsedMessage);
-
   const parsedMessage = JSON.parse(message);
+  console.log(parsedMessage);
   const { type, payload } = parsedMessage;
   const state = getState();
 
@@ -40,10 +39,10 @@ const handleMessage = async (message, ws) => {
       await triggerRecord({ state, ableton });
       break;
     case 'STOP':
-      await ableton.song.stop();
+      await ableton.song.stopPlaying();
       break;
     case 'PLAY':
-      await ableton.song.play();
+      await ableton.song.startPlaying();
       break;
     case 'TOGGLE_SEND':
       await toggleSend({ state, ableton, trackKey: payload.trackKey });

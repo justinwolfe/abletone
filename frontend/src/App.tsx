@@ -108,32 +108,30 @@ function App() {
         isRecording === 1 && 'recording'
       )}
     >
-      <WrapperUI>
-        <CenterCardUI>
-          <Stack direction="row" spacing={1}>
-            {renderTracks.map((trackToRender: any) => {
-              return (
-                <Button
-                  key={trackToRender.id}
-                  value={Boolean(trackToRender.recordSendEnabled)}
-                  variant={
-                    trackToRender.recordSendEnabled ? 'contained' : 'outlined'
-                  }
-                  onClick={() => {
-                    sendToApi({
-                      type: 'TOGGLE_SEND',
-                      payload: {
-                        trackKey: trackToRender.name,
-                      },
-                    });
-                  }}
-                >
-                  {trackToRender.name}
-                </Button>
-              );
-            })}
-          </Stack>
-        </CenterCardUI>
+      <Stack direction="column" spacing={1}>
+        <Stack direction="row" spacing={1}>
+          {renderTracks.map((trackToRender: any) => {
+            return (
+              <Button
+                key={trackToRender.id}
+                value={Boolean(trackToRender.recordSendEnabled)}
+                variant={
+                  trackToRender.recordSendEnabled ? 'contained' : 'outlined'
+                }
+                onClick={() => {
+                  sendToApi({
+                    type: 'TOGGLE_SEND',
+                    payload: {
+                      trackKey: trackToRender.name,
+                    },
+                  });
+                }}
+              >
+                {trackToRender.name}
+              </Button>
+            );
+          })}
+        </Stack>
 
         <Stack direction="row">
           <IconButton>
@@ -142,17 +140,17 @@ function App() {
           <IconButton>
             <Stop onClick={() => sendToApi({ type: 'STOP' })} />
           </IconButton>
-          <IconButton>
+          <IconButton size="large">
             <Mic onClick={() => sendToApi({ type: 'FIRE' })} />
           </IconButton>
         </Stack>
-      </WrapperUI>
-      <MetaUI>
+      </Stack>
+      {/* <MetaUI>
         <div>SCENE: {selectedSceneIndex}</div>
         <div>recording: {getRecordingStatus(isRecording)}</div>
         <div>playing: {isPlaying}</div>
         <div>songTime: {songTime}</div>
-      </MetaUI>
+      </MetaUI> */}
     </BackdropUI>
   );
 }
