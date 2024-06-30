@@ -2,7 +2,9 @@ import { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
+import { PlayArrow, Stop, Mic } from '@mui/icons-material';
 
 import classNames from 'classnames';
 import {
@@ -13,6 +15,7 @@ import {
   WrapperUI,
 } from './App.css.ts';
 import { getRecordingStatus } from './app.utils';
+import { Icon } from '@mui/material';
 
 function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
@@ -155,6 +158,17 @@ function App() {
             );
           })}
         </TrackRowUI> */}
+        <Stack direction="row">
+          <IconButton>
+            <PlayArrow />
+          </IconButton>
+          <IconButton>
+            <Stop />
+          </IconButton>
+          <IconButton>
+            <Mic />
+          </IconButton>
+        </Stack>
       </WrapperUI>
       <MetaUI>
         <div>SCENE: {selectedSceneIndex}</div>
