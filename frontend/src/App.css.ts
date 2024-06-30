@@ -77,11 +77,15 @@ export const BackdropUI = styled.div`
   transition: background-color 0.4s ease;
 
   &.count-in {
-    background-color: #c7c7ff;
+    background-color: #ffcece;
+  }
+
+  &.playing {
+    background-color: #a8bcff;
   }
 
   &.recording {
-    background-color: #8f8fff;
+    background-color: #ff8f8f;
   }
 `;
 

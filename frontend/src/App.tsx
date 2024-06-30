@@ -89,10 +89,6 @@ function App() {
     return tracks?.filter((track: any) => !track.name.includes('r-'));
   }, [tracks]);
 
-  const renderTrackKeys = useMemo(() => {
-    return renderTracks?.map((track: any) => track.name);
-  }, [renderTracks]);
-
   if (Object.keys(apiState).length === 0) {
     return null;
   }
@@ -105,7 +101,8 @@ function App() {
     <BackdropUI
       className={classNames(
         isRecording === 2 && 'count-in',
-        isRecording === 1 && 'recording'
+        isRecording === 1 && 'recording',
+        isPlaying && 'playing'
       )}
     >
       <Stack direction="column" spacing={1}>
