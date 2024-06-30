@@ -34,6 +34,15 @@ const handleMessage = async (message, ws) => {
   const state = getState();
 
   switch (type) {
+    case 'FIRE':
+      await triggerRecord({ state, ableton });
+      break;
+    case 'STOP':
+      await ableton.song.stop();
+      break;
+    case 'PLAY':
+      await ableton.song.play();
+      break;
     case 'TOGGLE_SEND':
       await toggleSend({ state, ableton, trackKey: payload.trackKey });
       break;

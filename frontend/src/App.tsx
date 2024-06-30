@@ -135,7 +135,31 @@ function App() {
           </Stack>
         </CenterCardUI>
 
-        {/* <TrackRowUI>
+        <Stack direction="row">
+          <IconButton>
+            <PlayArrow onClick={() => sendToApi({ type: 'PLAY' })} />
+          </IconButton>
+          <IconButton>
+            <Stop onClick={() => sendToApi({ type: 'STOP' })} />
+          </IconButton>
+          <IconButton>
+            <Mic onClick={() => sendToApi({ type: 'FIRE' })} />
+          </IconButton>
+        </Stack>
+      </WrapperUI>
+      <MetaUI>
+        <div>SCENE: {selectedSceneIndex}</div>
+        <div>recording: {getRecordingStatus(isRecording)}</div>
+        <div>playing: {isPlaying}</div>
+        <div>songTime: {songTime}</div>
+      </MetaUI>
+    </BackdropUI>
+  );
+}
+
+export default App;
+
+/* <TrackRowUI>
           {renderTracksForSelectedGroup.map((track) => {
             const clipSlot = track?.clipSlots[selectedSceneIndex];
 
@@ -157,27 +181,4 @@ function App() {
               </TrackSlotUI>
             );
           })}
-        </TrackRowUI> */}
-        <Stack direction="row">
-          <IconButton>
-            <PlayArrow />
-          </IconButton>
-          <IconButton>
-            <Stop />
-          </IconButton>
-          <IconButton>
-            <Mic />
-          </IconButton>
-        </Stack>
-      </WrapperUI>
-      <MetaUI>
-        <div>SCENE: {selectedSceneIndex}</div>
-        <div>recording: {getRecordingStatus(isRecording)}</div>
-        <div>playing: {isPlaying}</div>
-        <div>songTime: {songTime}</div>
-      </MetaUI>
-    </BackdropUI>
-  );
-}
-
-export default App;
+        </TrackRowUI> */
