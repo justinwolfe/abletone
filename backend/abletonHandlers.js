@@ -47,7 +47,7 @@ export const triggerRecord = async ({ state, ableton }) => {
 
   const matchingOutputTracks = await findMatchingOutputTracks({
     state,
-    trackKey,
+    trackKey: 'r',
   });
 
   if (!matchingOutputTracks.length) {
@@ -62,6 +62,8 @@ export const triggerRecord = async ({ state, ableton }) => {
       const selectedTrack = await ableton.song.view.get('selected_track');
       await selectedTrack.set('arm', true);
     }
+
+    await newHighlightedClipSlot.fire();
     return;
   }
 
