@@ -19,6 +19,14 @@ const getSerializableState = async (state) => {
 
     const clipSlots = await track.get('clip_slots');
 
+    const mixerDevice = await track.get('mixer_device');
+    const sends = await mixerDevice.get('sends');
+    const outputSend = sends.find((send) =>
+      send.raw.name.toLowerCase().includes('loops')
+    );
+
+    const outputSendValue = outputSend.raw.value;
+
     return {
       id: track.raw.id,
       name: track.raw.name,
@@ -27,6 +35,7 @@ const getSerializableState = async (state) => {
       isGroup: type.trim() === 'g',
       isMonitor: type.trim() === 'm',
       isRender: type.trim() === 'r',
+      recordSendEnabled: outputSendValue > 0 ? true : false,
       clipSlots: clipSlots.map((clipSlot, i) => {
         return {
           index: i,

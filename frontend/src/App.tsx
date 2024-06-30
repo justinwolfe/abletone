@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import classNames from 'classnames';
 import {
@@ -88,6 +90,14 @@ function App() {
     [tracksForSelectedGroup]
   );
 
+  const renderTracks = useMemo(() => {
+    return tracks?.filter((track: any) => !track.name.includes('r-'));
+  }, [tracks]);
+
+  const renderTrackKeys = useMemo(() => {
+    return renderTracks?.map((track: any) => track.name);
+  }, [renderTracks]);
+
   if (Object.keys(apiState).length === 0) {
     return null;
   }
@@ -99,22 +109,36 @@ function App() {
         isRecording === 1 && 'recording'
       )}
     >
-      <TrackCardUI>
-        <TrackNavButtonUI onClick={goToPreviousGroup}>
-          <Icon>navigate_before</Icon>
-        </TrackNavButtonUI>
-        <div>{selectedTrackName}</div>
-        <TrackNavButtonUI onClick={goToNextGroup}>
-          <Icon>navigate_next</Icon>
-        </TrackNavButtonUI>
-      </TrackCardUI>
       <WrapperUI>
         <CenterCardUI>
           <ConnectedUI>
             <div>connection status: {connectionStatus}</div>
           </ConnectedUI>
+          <div>
+            <ToggleButtonGroup value={renderTrackKeys}>
+              {renderTracks.map((trackToRender: any) => {
+                return (
+                  <ToggleButton
+                    key={trackToRender.id}
+                    value={Boolean(trackToRender.recordSendEnabled)}
+                    onClick={() => {
+                      sendToApi({
+                        type: 'TOGGLE_SEND',
+                        payload: {
+                          trackKey: trackToRender.name,
+                        },
+                      });
+                    }}
+                  >
+                    {trackToRender.name}
+                  </ToggleButton>
+                );
+              })}
+            </ToggleButtonGroup>
+          </div>
         </CenterCardUI>
-        <TrackRowUI>
+
+        {/* <TrackRowUI>
           {renderTracksForSelectedGroup.map((track) => {
             const clipSlot = track?.clipSlots[selectedSceneIndex];
 
@@ -136,7 +160,7 @@ function App() {
               </TrackSlotUI>
             );
           })}
-        </TrackRowUI>
+        </TrackRowUI> */}
       </WrapperUI>
       <MetaUI>
         <div>SCENE: {selectedSceneIndex}</div>
