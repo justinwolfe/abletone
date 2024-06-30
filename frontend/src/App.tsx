@@ -1,26 +1,17 @@
 import { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Button from '@mui/material/Button';
 
 import classNames from 'classnames';
 import {
-  TrackCardUI,
-  TrackNavButtonUI,
   CenterCardUI,
   ConnectedUI,
-  TrackRowUI,
   MetaUI,
   BackdropUI,
-  TrackSlotUI,
   WrapperUI,
-  PlayArrowUI,
-  StopUI,
-  IconUI,
 } from './App.css.ts';
 import { getRecordingStatus } from './app.utils';
-import { Icon } from '@mui/material';
 
 function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
@@ -115,26 +106,27 @@ function App() {
             <div>connection status: {connectionStatus}</div>
           </ConnectedUI>
           <div>
-            <ToggleButtonGroup value={renderTrackKeys}>
-              {renderTracks.map((trackToRender: any) => {
-                return (
-                  <ToggleButton
-                    key={trackToRender.id}
-                    value={Boolean(trackToRender.recordSendEnabled)}
-                    onClick={() => {
-                      sendToApi({
-                        type: 'TOGGLE_SEND',
-                        payload: {
-                          trackKey: trackToRender.name,
-                        },
-                      });
-                    }}
-                  >
-                    {trackToRender.name}
-                  </ToggleButton>
-                );
-              })}
-            </ToggleButtonGroup>
+            {renderTracks.map((trackToRender: any) => {
+              return (
+                <Button
+                  key={trackToRender.id}
+                  value={Boolean(trackToRender.recordSendEnabled)}
+                  variant={
+                    trackToRender.recordSendEnabled ? 'contained' : 'outlined'
+                  }
+                  onClick={() => {
+                    sendToApi({
+                      type: 'TOGGLE_SEND',
+                      payload: {
+                        trackKey: trackToRender.name,
+                      },
+                    });
+                  }}
+                >
+                  {trackToRender.name}
+                </Button>
+              );
+            })}
           </div>
         </CenterCardUI>
 
