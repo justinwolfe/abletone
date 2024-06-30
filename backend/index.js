@@ -34,6 +34,9 @@ const handleMessage = async (message, ws) => {
   const state = getState();
 
   switch (type) {
+    case 'TOGGLE_SEND':
+      await toggleSend({ state, ableton, trackKey: payload.trackKey });
+      break;
     case 'INCREMENT_GROUP':
       break;
     case 'DECREMENT_SCENE':
