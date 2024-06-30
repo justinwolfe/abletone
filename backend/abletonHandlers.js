@@ -59,7 +59,10 @@ export const triggerRecord = async ({ state, ableton }) => {
     'highlighted_clip_slot'
   );
 
-  if (highlightedClipSlot.raw.is_recording) {
+  if (
+    highlightedClipSlot.raw.is_recording ||
+    (!highlightedClipSlot.raw.has_clip && trackType === TRACK_TYPES.RENDER)
+  ) {
     await highlightedClipSlot.fire();
     return;
   }
