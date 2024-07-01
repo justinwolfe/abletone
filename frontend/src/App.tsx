@@ -13,6 +13,10 @@ import {
   MetaUI,
   BackdropUI,
   WrapperUI,
+  TrackRowUI,
+  TrackSlotUI,
+  StopUI,
+  PlayArrowUI,
 } from './App.css.ts';
 import { getRecordingStatus } from './app.utils';
 import { Icon } from '@mui/material';
@@ -153,6 +157,29 @@ function App() {
             <Mic />
           </IconButton>
         </Stack>
+        <TrackRowUI>
+          {renderTracksForSelectedGroup.map((track) => {
+            const clipSlot = track?.clipSlots[selectedSceneIndex];
+
+            if (!clipSlot) {
+              return 'error';
+            }
+
+            const { hasClip, isPlaying } = clipSlot;
+
+            const isSelected = track.id === selectedTrackId;
+
+            return (
+              <TrackSlotUI
+                key={track.id}
+                className={classNames(isSelected && 'isSelected')}
+              >
+                {hasClip && !isPlaying && <PlayArrowUI />}
+                {hasClip && isPlaying && <StopUI />}
+              </TrackSlotUI>
+            );
+          })}
+        </TrackRowUI>
       </Stack>
       {/* <MetaUI>
         <div>SCENE: {selectedSceneIndex}</div>
