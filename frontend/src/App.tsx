@@ -146,17 +146,6 @@ function App() {
           })}
         </Stack>
 
-        <Stack direction="row">
-          <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
-            <PlayArrow />
-          </IconButton>
-          <IconButton onClick={() => sendToApi({ type: 'STOP' })}>
-            <Stop />
-          </IconButton>
-          <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
-            <Mic />
-          </IconButton>
-        </Stack>
         <TrackRowUI>
           {renderTracksForSelectedGroup.map((track) => {
             const clipSlot = track?.clipSlots[selectedSceneIndex];
@@ -180,6 +169,17 @@ function App() {
             );
           })}
         </TrackRowUI>
+        <Stack direction="row">
+          <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
+            <PlayArrow />
+          </IconButton>
+          <IconButton onClick={() => sendToApi({ type: 'STOP' })}>
+            <Stop />
+          </IconButton>
+          <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
+            <Mic />
+          </IconButton>
+        </Stack>
       </Stack>
       {/* <MetaUI>
         <div>SCENE: {selectedSceneIndex}</div>
