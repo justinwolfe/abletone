@@ -1,13 +1,13 @@
 // server.js
 import express from 'express';
 import http from 'http';
-import net from 'net';
 import {
   state,
   subscribeToStateChanges,
   unsubscribeFromStateChanges,
 } from './state.js';
 import { Color } from 'ableton-js/util/color.js';
+import { ableton } from './abletonListeners.js';
 
 const getSerializableState = async (state) => {
   const trackPromises = state.tracks.map(async (track) => {
@@ -43,6 +43,7 @@ const getSerializableState = async (state) => {
 
   const serializableTracks = await Promise.all(trackPromises);
   const filteredTracks = serializableTracks.filter(Boolean);
+  const metronome = await ableton.song.get('metronome');
 
   return {
     selectedSceneIndex: state.selectedSceneIndex,
@@ -51,6 +52,7 @@ const getSerializableState = async (state) => {
     selectedTrackName: state.selectedTrackName,
     selectedTrackId: state.selectedTrackId,
     selectedGroup: state.selectedTrackName?.split('-')?.[0],
+    metronomeEnabled: metronome,
     isRecording: state.isRecording,
     isPlaying: state.isPlaying,
     songTime: state.songTime,

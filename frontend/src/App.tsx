@@ -4,7 +4,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import { PlayArrow, Stop, Mic } from '@mui/icons-material';
+import { PlayArrow, Stop, Mic, Schedule } from '@mui/icons-material';
 
 import classNames from 'classnames';
 import {
@@ -64,6 +64,7 @@ function App() {
     selectedGroup,
     isRecording,
     isPlaying,
+    metronomeEnabled,
     songTime,
     tracks,
   } = apiState;
@@ -109,6 +110,13 @@ function App() {
         isPlaying && 'playing'
       )}
     >
+      <Button
+        variant={metronomeEnabled ? 'contained' : 'outlined'}
+        onClick={() => sendToApi({ type: 'TOGGLE_METRONOME' })}
+        style={{ position: 'absolute', top: 0, left: 0, margin: '10px' }}
+      >
+        <Schedule />
+      </Button>
       <Stack direction="column" spacing={1}>
         <Stack direction="row" spacing={1}>
           {monitorTracks.map((trackToRender: any) => {
@@ -135,14 +143,14 @@ function App() {
         </Stack>
 
         <Stack direction="row">
-          <IconButton>
-            <PlayArrow onClick={() => sendToApi({ type: 'PLAY' })} />
+          <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
+            <PlayArrow />
           </IconButton>
-          <IconButton>
-            <Stop onClick={() => sendToApi({ type: 'STOP' })} />
+          <IconButton onClick={() => sendToApi({ type: 'STOP' })}>
+            <Stop />
           </IconButton>
-          <IconButton size="large">
-            <Mic onClick={() => sendToApi({ type: 'FIRE' })} />
+          <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
+            <Mic />
           </IconButton>
         </Stack>
       </Stack>
