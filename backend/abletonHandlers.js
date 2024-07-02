@@ -76,8 +76,13 @@ export const toggleClip = async ({ state, ableton, clipSlotId }) => {
     const { has_clip, is_playing, is_recording, is_triggered } =
       matchingClipSlot.raw;
 
-    if (has_clip && is_playing) {
+    if (has_clip && is_playing && !is_recording) {
       await matchingClipSlot.stop();
+      return;
+    }
+
+    if (has_clip && is_playing && is_recording) {
+      await matchingClipSlot.fire();
       return;
     }
 

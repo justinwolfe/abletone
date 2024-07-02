@@ -1,6 +1,11 @@
 import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
-import { PlayArrowOutlined, Square } from '@mui/icons-material';
+import {
+  PlayArrowOutlined,
+  Square,
+  RadioButtonChecked,
+  RadioButtonUnchecked,
+} from '@mui/icons-material';
 import Icon from '@mui/material/Icon';
 
 const commonWidth = '60vw';
@@ -108,5 +113,7 @@ export const WrapperUI = styled.div``;
 
 export const PlayArrowUI = styled(PlayArrowOutlined)``;
 export const StopUI = styled(Square)``;
+export const RecordUI = styled(RadioButtonChecked)``;
+export const TriggeredUI = styled(RadioButtonUnchecked)``;
 
 export const IconUI = styled(Icon)``;

@@ -16,7 +16,9 @@ import {
   TrackRowUI,
   TrackSlotUI,
   StopUI,
+  RecordUI,
   PlayArrowUI,
+  TriggeredUI,
 } from './App.css.ts';
 import { getRecordingStatus } from './app.utils';
 import { Icon } from '@mui/material';
@@ -154,7 +156,14 @@ function App() {
               return 'error';
             }
 
-            const { hasClip, isPlaying } = clipSlot;
+            const {
+              hasClip,
+              isPlaying,
+              isRecording: isClipRecording,
+              isTriggered,
+            } = clipSlot;
+
+            console.log(clipSlot);
 
             const isSelected = track.id === selectedTrackId;
 
@@ -172,8 +181,14 @@ function App() {
                   });
                 }}
               >
-                {hasClip && !isPlaying && <PlayArrowUI />}
-                {hasClip && isPlaying && <StopUI />}
+                {Boolean(hasClip && !isPlaying) && <PlayArrowUI />}
+                {Boolean(hasClip && isPlaying && !isClipRecording) && (
+                  <StopUI />
+                )}
+                {Boolean(!hasClip && isTriggered) && <TriggeredUI />}
+                {Boolean(hasClip && isPlaying && isClipRecording) && (
+                  <RecordUI />
+                )}
               </TrackSlotUI>
             );
           })}
