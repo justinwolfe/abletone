@@ -12,7 +12,6 @@ import { ableton } from './abletonListeners.js';
 const getSerializableState = async (state) => {
   const trackPromises = state.tracks.map(async (track) => {
     const clipSlots = await track.get('clip_slots');
-
     const mixerDevice = await track.get('mixer_device');
     const sends = await mixerDevice.get('sends');
     const outputSend = sends.find((send) =>
@@ -44,6 +43,7 @@ const getSerializableState = async (state) => {
   const serializableTracks = await Promise.all(trackPromises);
   const filteredTracks = serializableTracks.filter(Boolean);
   const metronome = await ableton.song.get('metronome');
+  const tempo = await ableton.song.get('tempo');
 
   return {
     selectedSceneIndex: state.selectedSceneIndex,
@@ -57,6 +57,7 @@ const getSerializableState = async (state) => {
     isPlaying: state.isPlaying,
     songTime: state.songTime,
     tracks: filteredTracks,
+    tempo: tempo,
   };
 };
 

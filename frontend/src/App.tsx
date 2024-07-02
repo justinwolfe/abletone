@@ -4,7 +4,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import { PlayArrow, Stop, Mic, Schedule } from '@mui/icons-material';
+import { PlayArrow, Stop, Mic, Schedule, Delete } from '@mui/icons-material';
 
 import classNames from 'classnames';
 import {
@@ -72,6 +72,7 @@ function App() {
     isPlaying,
     metronomeEnabled,
     songTime,
+    tempo,
     tracks,
   } = apiState;
 
@@ -123,12 +124,22 @@ function App() {
       >
         <Schedule />
       </Button>
+      <div
+        style={{
+          position: 'absolute',
+          top: '0',
+          left: '50%',
+          marginTop: '15px',
+        }}
+      >
+        {tempo}
+      </div>
       <Button
         variant={metronomeEnabled ? 'contained' : 'outlined'}
         onClick={() => sendToApi({ type: 'DELETE_ALL_CLIPS' })}
         style={{ position: 'absolute', top: 0, right: 0, margin: '10px' }}
       >
-        Delete
+        <Delete />
       </Button>
       <Stack direction="column" spacing={1}>
         <Stack direction="row" spacing={1}>
