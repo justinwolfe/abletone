@@ -47,6 +47,9 @@ const handleMessage = async (message, ws) => {
     case 'TOGGLE_SEND':
       await toggleSend({ state, ableton, trackKey: payload.trackKey });
       break;
+    case 'TOGGLE_CLIP_SLOT':
+      console.log('toggle clip slot', payload);
+      break;
     case 'TOGGLE_METRONOME': {
       const currentValue = await ableton.song.get('metronome');
       await ableton.song.set('metronome', !currentValue);

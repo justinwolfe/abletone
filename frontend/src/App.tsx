@@ -162,6 +162,12 @@ function App() {
               <TrackSlotUI
                 key={track.id}
                 className={classNames(isSelected && 'isSelected')}
+                onClick={() =>
+                  sendToApi({
+                    type: 'TOGGLE_CLIP_SLOT',
+                    payload: { name: track.name, scene: selectedSceneIndex },
+                  })
+                }
               >
                 {hasClip && !isPlaying && <PlayArrowUI />}
                 {hasClip && isPlaying && <StopUI />}
