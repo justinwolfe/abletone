@@ -21,6 +21,22 @@ export const deleteClip = async ({ state, ableton }) => {
 
   if (highlightedClipSlot?.raw?.has_clip) {
     await highlightedClipSlot.deleteClip();
+  } else {
+    console.log('no clip to delete');
+
+    // Select the previous track
+    let previousTrackIndex = state.selectedTrackIndex - 1;
+    if (previousTrackIndex < 0) {
+      previousTrackIndex = 0; // Ensure we don't go out of bounds
+    }
+
+    const previousTrack = state.tracks[previousTrackIndex];
+    if (previousTrack) {
+      await ableton.song.view.set('selected_track', previousTrack.raw.id);
+      console.log(`Selected previous track: ${previousTrack.raw.name}`);
+    } else {
+      console.log('No previous track found');
+    }
   }
 };
 
