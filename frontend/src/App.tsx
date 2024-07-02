@@ -152,8 +152,7 @@ function App() {
   );
 
   const renderRows = () => (
-    <>
-      {' '}
+    <div>
       <Stack direction="row" spacing={1}>
         {monitorTracks.map((trackToRender: any) => {
           return (
@@ -209,6 +208,7 @@ function App() {
                   },
                 });
               }}
+              tabIndex={0}
             >
               {Boolean(hasClip && !isPlaying) && <PlayArrowUI />}
               {Boolean(hasClip && isPlaying && !isClipRecording) && <StopUI />}
@@ -218,20 +218,20 @@ function App() {
           );
         })}
       </TrackRowUI>
-    </>
+    </div>
   );
 
   const renderTransport = () => (
-    <Stack direction="column" spacing={1}>
+    <Stack direction="column" spacing={1} style={{ paddingTop: '5%' }}>
       <Stack direction="row">
         <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
-          <PlayArrow />
+          <PlayArrow style={{ height: '100px', width: '100px' }} />
         </IconButton>
         <IconButton onClick={() => sendToApi({ type: 'STOP' })}>
-          <Stop />
+          <Stop style={{ height: '100px', width: '100px' }} />
         </IconButton>
         <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
-          <Mic />
+          <Mic style={{ height: '100px', width: '100px' }} />
         </IconButton>
       </Stack>
     </Stack>
@@ -245,15 +245,22 @@ function App() {
         isPlaying && 'playing'
       )}
     >
-      {renderHeader()}
-      {renderRows()}
-      {renderTransport()}
-      {/* <MetaUI>
-        <div>SCENE: {selectedSceneIndex}</div>
-        <div>recording: {getRecordingStatus(isRecording)}</div>
-        <div>playing: {isPlaying}</div>
-        <div>songTime: {songTime}</div>
-      </MetaUI> */}
+      <div>
+        {renderHeader()}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            paddingLeft: '15%',
+            paddingRight: '15%',
+            paddingTop: '5%',
+          }}
+        >
+          {renderRows()}
+          {renderTransport()}
+        </div>
+      </div>
     </BackdropUI>
   );
 }

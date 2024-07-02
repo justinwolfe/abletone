@@ -67,9 +67,7 @@ export const TrackNavButtonUI = styled.button`
   padding-right: 15px;
 `;
 
-export const DecrementTrackButton = styled(TrackNavButtonUI)`
-  padd
-`;
+export const DecrementTrackButton = styled(TrackNavButtonUI)``;
 
 export const BackdropUI = styled.div`
   width: 100vw;
