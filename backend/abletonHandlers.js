@@ -53,6 +53,41 @@ export const toggleSend = async ({ state, ableton, trackKey }) => {
   await outputSend.set('value', currentValue > 0 ? 0 : 1);
 };
 
+export const toggleClip = async ({ state, ableton, clipSlotId }) => {
+  const tracks = state.tracks;
+
+  let matchingClipSlot = null;
+  let matchingTrack = null;
+
+  for (let track of tracks) {
+    const clipSlots = await track.get('clip_slots');
+    const clipSlot = clipSlots.find(
+      (clipSlot) => clipSlot.raw.id === clipSlotId
+    );
+
+    if (clipSlot) {
+      matchingClipSlot = clipSlot;
+      matchingTrack = track;
+      break;
+    }
+  }
+
+  if (matchingClipSlot && matchingTrack) {
+    const { has_clip, is_playing, is_recording, is_triggered } =
+      matchingClipSlot.raw;
+
+    if (has_clip && is_playing) {
+      await matchingClipSlot.stop();
+      return;
+    }
+
+    await matchingTrack.set('arm', true);
+
+    await matchingClipSlot.fire();
+    console.log('fired clip slot');
+  }
+};
+
 export const triggerRecord = async ({ state, ableton }) => {
   const [trackKey, trackType] = state.selectedTrackName.split('-');
   const highlightedClipSlot = await ableton.song.view.get(

@@ -91,7 +91,7 @@ function App() {
   );
 
   const renderTracks = useMemo(() => {
-    return tracks?.filter((track: any) => !track.name.includes('r-'));
+    return tracks?.filter((track: any) => track.name.includes('r-'));
   }, [tracks]);
 
   const monitorTracks = useMemo(() => {
@@ -147,7 +147,7 @@ function App() {
         </Stack>
 
         <TrackRowUI>
-          {renderTracksForSelectedGroup.map((track) => {
+          {renderTracks.map((track) => {
             const clipSlot = track?.clipSlots[selectedSceneIndex];
 
             if (!clipSlot) {
@@ -162,12 +162,15 @@ function App() {
               <TrackSlotUI
                 key={track.id}
                 className={classNames(isSelected && 'isSelected')}
-                onClick={() =>
+                onClick={() => {
+                  console.log('hi', clipSlot);
                   sendToApi({
-                    type: 'TOGGLE_CLIP_SLOT',
-                    payload: { name: track.name, scene: selectedSceneIndex },
-                  })
-                }
+                    type: 'TOGGLE_CLIP',
+                    payload: {
+                      clipSlotId: clipSlot.id,
+                    },
+                  });
+                }}
               >
                 {hasClip && !isPlaying && <PlayArrowUI />}
                 {hasClip && isPlaying && <StopUI />}
@@ -198,27 +201,3 @@ function App() {
 }
 
 export default App;
-
-/* <TrackRowUI>
-          {renderTracksForSelectedGroup.map((track) => {
-            const clipSlot = track?.clipSlots[selectedSceneIndex];
-
-            if (!clipSlot) {
-              return 'error';
-            }
-
-            const { hasClip, isPlaying } = clipSlot;
-
-            const isSelected = track.id === selectedTrackId;
-
-            return (
-              <TrackSlotUI
-                key={track.id}
-                className={classNames(isSelected && 'isSelected')}
-              >
-                {hasClip && !isPlaying && <PlayArrowUI />}
-                {hasClip && isPlaying && <StopUI />}
-              </TrackSlotUI>
-            );
-          })}
-        </TrackRowUI> */

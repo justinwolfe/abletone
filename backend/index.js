@@ -15,6 +15,7 @@ import {
   deleteClip,
   triggerRecord,
   toggleSend,
+  toggleClip,
 } from './abletonHandlers.js';
 
 const DOUBLE_PRESS_DELAY = 600; // milliseconds
@@ -47,8 +48,8 @@ const handleMessage = async (message, ws) => {
     case 'TOGGLE_SEND':
       await toggleSend({ state, ableton, trackKey: payload.trackKey });
       break;
-    case 'TOGGLE_CLIP_SLOT':
-      console.log('toggle clip slot', payload);
+    case 'TOGGLE_CLIP':
+      await toggleClip({ state, ableton, clipSlotId: payload.clipSlotId });
       break;
     case 'TOGGLE_METRONOME': {
       const currentValue = await ableton.song.get('metronome');
