@@ -115,6 +115,128 @@ function App() {
     sendToApi({ type: 'SET_TEMPO', payload: { tempo: newValue } });
   };
 
+  const renderHeader = () => (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+      }}
+    >
+      <Button
+        variant={metronomeEnabled ? 'contained' : 'outlined'}
+        onClick={() => sendToApi({ type: 'TOGGLE_METRONOME' })}
+        style={{ margin: '10px' }}
+      >
+        <Schedule />
+      </Button>
+      <div>
+        <Slider
+          aria-label="Tempo"
+          value={tempo}
+          onChange={handleTempoChange}
+          min={40}
+          max={240}
+          style={{ width: 150, margin: '10px' }}
+        />
+      </div>
+      <Button
+        variant={'contained'}
+        onClick={() => sendToApi({ type: 'DELETE_ALL_CLIPS' })}
+        style={{ margin: '10px' }}
+      >
+        <Delete />
+      </Button>
+    </div>
+  );
+
+  const renderRows = () => (
+    <>
+      {' '}
+      <Stack direction="row" spacing={1}>
+        {monitorTracks.map((trackToRender: any) => {
+          return (
+            <Button
+              key={trackToRender.id}
+              value={Boolean(trackToRender.recordSendEnabled)}
+              variant={
+                trackToRender.recordSendEnabled ? 'contained' : 'outlined'
+              }
+              onClick={() => {
+                sendToApi({
+                  type: 'TOGGLE_SEND',
+                  payload: {
+                    trackKey: trackToRender.name,
+                  },
+                });
+              }}
+            >
+              {trackToRender.name}
+            </Button>
+          );
+        })}
+      </Stack>
+      <TrackRowUI>
+        {renderTracks.map((track) => {
+          const clipSlot = track?.clipSlots[selectedSceneIndex];
+
+          if (!clipSlot) {
+            return 'error';
+          }
+
+          const {
+            hasClip,
+            isPlaying,
+            isRecording: isClipRecording,
+            isTriggered,
+          } = clipSlot;
+
+          console.log(clipSlot);
+
+          const isSelected = track.id === selectedTrackId;
+
+          return (
+            <TrackSlotUI
+              key={track.id}
+              className={classNames(isSelected && 'isSelected')}
+              onClick={() => {
+                console.log('hi', clipSlot);
+                sendToApi({
+                  type: 'TOGGLE_CLIP',
+                  payload: {
+                    clipSlotId: clipSlot.id,
+                  },
+                });
+              }}
+            >
+              {Boolean(hasClip && !isPlaying) && <PlayArrowUI />}
+              {Boolean(hasClip && isPlaying && !isClipRecording) && <StopUI />}
+              {Boolean(!hasClip && isTriggered) && <TriggeredUI />}
+              {Boolean(hasClip && isPlaying && isClipRecording) && <RecordUI />}
+            </TrackSlotUI>
+          );
+        })}
+      </TrackRowUI>
+    </>
+  );
+
+  const renderTransport = () => (
+    <Stack direction="column" spacing={1}>
+      <Stack direction="row">
+        <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
+          <PlayArrow />
+        </IconButton>
+        <IconButton onClick={() => sendToApi({ type: 'STOP' })}>
+          <Stop />
+        </IconButton>
+        <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
+          <Mic />
+        </IconButton>
+      </Stack>
+    </Stack>
+  );
+
   return (
     <BackdropUI
       className={classNames(
@@ -123,121 +245,9 @@ function App() {
         isPlaying && 'playing'
       )}
     >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          width: '100%',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Button
-          variant={metronomeEnabled ? 'contained' : 'outlined'}
-          onClick={() => sendToApi({ type: 'TOGGLE_METRONOME' })}
-          style={{ margin: '10px' }}
-        >
-          <Schedule />
-        </Button>
-        <div>
-          <Slider
-            aria-label="Tempo"
-            value={tempo}
-            onChange={handleTempoChange}
-            min={40}
-            max={240}
-            style={{ width: 150, margin: '10px' }}
-          />
-        </div>
-        <Button
-          variant={'contained'}
-          onClick={() => sendToApi({ type: 'DELETE_ALL_CLIPS' })}
-          style={{ margin: '10px' }}
-        >
-          <Delete />
-        </Button>
-      </div>
-      <Stack direction="column" spacing={1}>
-        <Stack direction="row" spacing={1}>
-          {monitorTracks.map((trackToRender: any) => {
-            return (
-              <Button
-                key={trackToRender.id}
-                value={Boolean(trackToRender.recordSendEnabled)}
-                variant={
-                  trackToRender.recordSendEnabled ? 'contained' : 'outlined'
-                }
-                onClick={() => {
-                  sendToApi({
-                    type: 'TOGGLE_SEND',
-                    payload: {
-                      trackKey: trackToRender.name,
-                    },
-                  });
-                }}
-              >
-                {trackToRender.name}
-              </Button>
-            );
-          })}
-        </Stack>
-
-        <TrackRowUI>
-          {renderTracks.map((track) => {
-            const clipSlot = track?.clipSlots[selectedSceneIndex];
-
-            if (!clipSlot) {
-              return 'error';
-            }
-
-            const {
-              hasClip,
-              isPlaying,
-              isRecording: isClipRecording,
-              isTriggered,
-            } = clipSlot;
-
-            console.log(clipSlot);
-
-            const isSelected = track.id === selectedTrackId;
-
-            return (
-              <TrackSlotUI
-                key={track.id}
-                className={classNames(isSelected && 'isSelected')}
-                onClick={() => {
-                  console.log('hi', clipSlot);
-                  sendToApi({
-                    type: 'TOGGLE_CLIP',
-                    payload: {
-                      clipSlotId: clipSlot.id,
-                    },
-                  });
-                }}
-              >
-                {Boolean(hasClip && !isPlaying) && <PlayArrowUI />}
-                {Boolean(hasClip && isPlaying && !isClipRecording) && (
-                  <StopUI />
-                )}
-                {Boolean(!hasClip && isTriggered) && <TriggeredUI />}
-                {Boolean(hasClip && isPlaying && isClipRecording) && (
-                  <RecordUI />
-                )}
-              </TrackSlotUI>
-            );
-          })}
-        </TrackRowUI>
-        <Stack direction="row">
-          <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
-            <PlayArrow />
-          </IconButton>
-          <IconButton onClick={() => sendToApi({ type: 'STOP' })}>
-            <Stop />
-          </IconButton>
-          <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
-            <Mic />
-          </IconButton>
-        </Stack>
-      </Stack>
+      {renderHeader()}
+      {renderRows()}
+      {renderTransport()}
       {/* <MetaUI>
         <div>SCENE: {selectedSceneIndex}</div>
         <div>recording: {getRecordingStatus(isRecording)}</div>
