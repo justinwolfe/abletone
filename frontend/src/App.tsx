@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import { PlayArrow, Stop, Mic, Schedule, Delete } from '@mui/icons-material';
+import Slider from '@mui/material/Slider';
 
 import classNames from 'classnames';
 import {
@@ -109,6 +110,11 @@ function App() {
     return null;
   }
 
+  const handleTempoChange = (event, newValue) => {
+    // Update the state or send the new value to the backend
+    sendToApi({ type: 'SET_TEMPO', payload: { tempo: newValue } });
+  };
+
   return (
     <BackdropUI
       className={classNames(
@@ -117,30 +123,39 @@ function App() {
         isPlaying && 'playing'
       )}
     >
-      <Button
-        variant={metronomeEnabled ? 'contained' : 'outlined'}
-        onClick={() => sendToApi({ type: 'TOGGLE_METRONOME' })}
-        style={{ position: 'absolute', top: 0, left: 0, margin: '10px' }}
-      >
-        <Schedule />
-      </Button>
       <div
         style={{
-          position: 'absolute',
-          top: '0',
-          left: '50%',
-          marginTop: '15px',
+          display: 'flex',
+          flexDirection: 'row',
+          width: '100%',
+          justifyContent: 'space-between',
         }}
       >
-        {tempo}
+        <Button
+          variant={metronomeEnabled ? 'contained' : 'outlined'}
+          onClick={() => sendToApi({ type: 'TOGGLE_METRONOME' })}
+          style={{ margin: '10px' }}
+        >
+          <Schedule />
+        </Button>
+        <div>
+          <Slider
+            aria-label="Tempo"
+            value={tempo}
+            onChange={handleTempoChange}
+            min={40}
+            max={240}
+            style={{ width: 150, margin: '10px' }}
+          />
+        </div>
+        <Button
+          variant={'contained'}
+          onClick={() => sendToApi({ type: 'DELETE_ALL_CLIPS' })}
+          style={{ margin: '10px' }}
+        >
+          <Delete />
+        </Button>
       </div>
-      <Button
-        variant={metronomeEnabled ? 'contained' : 'outlined'}
-        onClick={() => sendToApi({ type: 'DELETE_ALL_CLIPS' })}
-        style={{ position: 'absolute', top: 0, right: 0, margin: '10px' }}
-      >
-        <Delete />
-      </Button>
       <Stack direction="column" spacing={1}>
         <Stack direction="row" spacing={1}>
           {monitorTracks.map((trackToRender: any) => {

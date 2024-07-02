@@ -60,6 +60,9 @@ const handleMessage = async (message, ws) => {
       await ableton.song.set('metronome', !currentValue);
       break;
     }
+    case 'SET_TEMPO':
+      await ableton.song.set('tempo', payload.tempo);
+      break;
     case 'INCREMENT_GROUP':
       break;
     case 'DECREMENT_SCENE':
