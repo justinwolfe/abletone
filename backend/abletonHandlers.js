@@ -40,6 +40,27 @@ export const deleteClip = async ({ state, ableton }) => {
   }
 };
 
+export const deleteAllClips = async ({ ableton }) => {
+  const tracks = await ableton.song.get('tracks');
+
+  for (const track of tracks) {
+    if (!track.raw.name.includes('r-')) {
+      continue;
+    }
+    const clipSlots = await track.get('clip_slots');
+    for (const clipSlot of clipSlots) {
+      if (clipSlot.raw.has_clip) {
+        await clipSlot.deleteClip();
+        console.log(
+          `Deleted clip in track ${track.raw.name}, slot ${clipSlot.raw.index}`
+        );
+      }
+    }
+  }
+
+  console.log('All clips deleted');
+};
+
 export const duplicateScene = async ({ state, ableton }) => {
   await ableton.song.duplicateScene(state.selectedSceneIndex);
   const selectedScene = await ableton.song.view.get('selected_scene');

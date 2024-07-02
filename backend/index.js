@@ -16,6 +16,7 @@ import {
   triggerRecord,
   toggleSend,
   toggleClip,
+  deleteAllClips,
 } from './abletonHandlers.js';
 
 const DOUBLE_PRESS_DELAY = 600; // milliseconds
@@ -44,6 +45,9 @@ const handleMessage = async (message, ws) => {
       break;
     case 'PLAY':
       await ableton.song.startPlaying();
+      break;
+    case 'DELETE_ALL_CLIPS':
+      await deleteAllClips({ state, ableton });
       break;
     case 'TOGGLE_SEND':
       await toggleSend({ state, ableton, trackKey: payload.trackKey });

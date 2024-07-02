@@ -123,6 +123,13 @@ function App() {
       >
         <Schedule />
       </Button>
+      <Button
+        variant={metronomeEnabled ? 'contained' : 'outlined'}
+        onClick={() => sendToApi({ type: 'DELETE_ALL_CLIPS' })}
+        style={{ position: 'absolute', top: 0, right: 0, margin: '10px' }}
+      >
+        Delete
+      </Button>
       <Stack direction="column" spacing={1}>
         <Stack direction="row" spacing={1}>
           {monitorTracks.map((trackToRender: any) => {
