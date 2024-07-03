@@ -48,6 +48,7 @@ const handleMessage = async (message, ws) => {
       break;
     case 'DELETE_ALL_CLIPS':
       await deleteAllClips({ state, ableton });
+      await ableton.song.stopPlaying();
       break;
     case 'TOGGLE_SEND':
       await toggleSend({ state, ableton, trackKey: payload.trackKey });
