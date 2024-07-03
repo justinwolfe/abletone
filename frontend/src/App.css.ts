@@ -112,3 +112,17 @@ export const RecordUI = styled(RadioButtonChecked)``;
 export const TriggeredUI = styled(RadioButtonUnchecked)``;
 
 export const IconUI = styled(Icon)``;
+
+export const CenteredContainerUI = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 0;
+`;
+
+export const TransportContainerUI = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-top: 5%;
+`;

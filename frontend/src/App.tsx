@@ -20,6 +20,7 @@ import {
   RecordUI,
   PlayArrowUI,
   TriggeredUI,
+  TransportContainerUI,
 } from './App.css.ts';
 import { getRecordingStatus } from './app.utils';
 import { Icon } from '@mui/material';
@@ -222,19 +223,17 @@ function App() {
   );
 
   const renderTransport = () => (
-    <Stack direction="column" spacing={1} style={{ paddingTop: '5%' }}>
-      <Stack direction="row">
-        <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
-          <PlayArrow style={{ height: '100px', width: '100px' }} />
-        </IconButton>
-        <IconButton onClick={() => sendToApi({ type: 'STOP' })}>
-          <Stop style={{ height: '100px', width: '100px' }} />
-        </IconButton>
-        <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
-          <Mic style={{ height: '100px', width: '100px' }} />
-        </IconButton>
-      </Stack>
-    </Stack>
+    <TransportContainerUI>
+      <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
+        <PlayArrow style={{ height: '100px', width: '100px' }} />
+      </IconButton>
+      <IconButton onClick={() => sendToApi({ type: 'STOP' })}>
+        <Stop style={{ height: '100px', width: '100px' }} />
+      </IconButton>
+      <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
+        <Mic style={{ height: '100px', width: '100px' }} />
+      </IconButton>
+    </TransportContainerUI>
   );
 
   return (
