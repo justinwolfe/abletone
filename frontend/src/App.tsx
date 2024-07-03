@@ -21,6 +21,7 @@ import {
   PlayArrowUI,
   TriggeredUI,
   TransportContainerUI,
+  CenteredContainerUI,
 } from './App.css.ts';
 import { getRecordingStatus } from './app.utils';
 import { Icon } from '@mui/material';
@@ -153,73 +154,81 @@ function App() {
   );
 
   const renderRows = () => (
-    <div>
-      <Stack direction="row" spacing={1}>
-        {monitorTracks.map((trackToRender: any) => {
-          return (
-            <Button
-              key={trackToRender.id}
-              value={Boolean(trackToRender.recordSendEnabled)}
-              variant={
-                trackToRender.recordSendEnabled ? 'contained' : 'outlined'
-              }
-              onClick={() => {
-                sendToApi({
-                  type: 'TOGGLE_SEND',
-                  payload: {
-                    trackKey: trackToRender.name,
-                  },
-                });
-              }}
-            >
-              {trackToRender.name}
-            </Button>
-          );
-        })}
-      </Stack>
-      <TrackRowUI>
-        {renderTracks.map((track) => {
-          const clipSlot = track?.clipSlots[selectedSceneIndex];
+    <>
+      <CenteredContainerUI>
+        <Stack direction="row" spacing={1}>
+          {monitorTracks.map((trackToRender: any) => {
+            return (
+              <Button
+                key={trackToRender.id}
+                value={Boolean(trackToRender.recordSendEnabled)}
+                variant={
+                  trackToRender.recordSendEnabled ? 'contained' : 'outlined'
+                }
+                onClick={() => {
+                  sendToApi({
+                    type: 'TOGGLE_SEND',
+                    payload: {
+                      trackKey: trackToRender.name,
+                    },
+                  });
+                }}
+              >
+                {trackToRender.name}
+              </Button>
+            );
+          })}
+        </Stack>
+      </CenteredContainerUI>
+      <CenteredContainerUI>
+        <TrackRowUI>
+          {renderTracks.map((track) => {
+            const clipSlot = track?.clipSlots[selectedSceneIndex];
 
-          if (!clipSlot) {
-            return 'error';
-          }
+            if (!clipSlot) {
+              return 'error';
+            }
 
-          const {
-            hasClip,
-            isPlaying,
-            isRecording: isClipRecording,
-            isTriggered,
-          } = clipSlot;
+            const {
+              hasClip,
+              isPlaying,
+              isRecording: isClipRecording,
+              isTriggered,
+            } = clipSlot;
 
-          console.log(clipSlot);
+            console.log(clipSlot);
 
-          const isSelected = track.id === selectedTrackId;
+            const isSelected = track.id === selectedTrackId;
 
-          return (
-            <TrackSlotUI
-              key={track.id}
-              className={classNames(isSelected && 'isSelected')}
-              onClick={() => {
-                console.log('hi', clipSlot);
-                sendToApi({
-                  type: 'TOGGLE_CLIP',
-                  payload: {
-                    clipSlotId: clipSlot.id,
-                  },
-                });
-              }}
-              tabIndex={0}
-            >
-              {Boolean(hasClip && !isPlaying) && <PlayArrowUI />}
-              {Boolean(hasClip && isPlaying && !isClipRecording) && <StopUI />}
-              {Boolean(!hasClip && isTriggered) && <TriggeredUI />}
-              {Boolean(hasClip && isPlaying && isClipRecording) && <RecordUI />}
-            </TrackSlotUI>
-          );
-        })}
-      </TrackRowUI>
-    </div>
+            return (
+              <TrackSlotUI
+                key={track.id}
+                className={classNames(isSelected && 'isSelected')}
+                onClick={() => {
+                  console.log('hi', clipSlot);
+                  sendToApi({
+                    type: 'TOGGLE_CLIP',
+                    payload: {
+                      clipSlotId: clipSlot.id,
+                    },
+                  });
+                }}
+                tabIndex={0}
+              >
+                {Boolean(hasClip && !isPlaying) && <PlayArrowUI />}
+                {Boolean(hasClip && isPlaying && !isClipRecording) && (
+                  <StopUI />
+                )}
+                {Boolean(!hasClip && isTriggered) && <TriggeredUI />}
+                {Boolean(hasClip && isPlaying && isClipRecording) && (
+                  <RecordUI />
+                )}
+              </TrackSlotUI>
+            );
+          })}
+        </TrackRowUI>
+      </CenteredContainerUI>
+    </>
   );
 
   const renderTransport = () => (
@@ -246,16 +255,7 @@ function App() {
     >
       <div>
         {renderHeader()}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-            paddingLeft: '15%',
-            paddingRight: '15%',
-            paddingTop: '5%',
-          }}
-        >
+        <div>
           {renderRows()}
           {renderTransport()}
         </div>
