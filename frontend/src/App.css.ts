@@ -8,16 +8,11 @@ import {
 } from '@mui/icons-material';
 import Icon from '@mui/material/Icon';
 
-const commonWidth = '60vw';
-const gapWidthPercentage = 2; // The percentage of the gap relative to the commonWidth
-const numberOfGaps = 3; // Since we want 4 slots, there will be 3 gaps in between
-const gapWidth = `calc(${commonWidth} * ${gapWidthPercentage / 100})`; // The width of a single gap
-const totalGapWidth = `calc(${gapWidth} * ${numberOfGaps})`; // Total width of all gaps
-const trackSlotBaseWidth = `calc((${commonWidth} - ${totalGapWidth}) / 5)`; // The base width for each TrackSlotUI without padding or border
+const commonWidth = '100vw';
 
 export const TrackSlotUI = styled(Paper)`
   height: 50px;
-  width: ${trackSlotBaseWidth};
+  width: 120px;
   box-sizing: border-box; // Include padding and border in the element's width
   padding: 10px; // Example padding
   border: 1px solid #ccc; // Example border
@@ -34,8 +29,8 @@ export const TrackSlotUI = styled(Paper)`
 export const TrackRowUI = styled.div`
   margin-top: 30px;
   display: flex;
-  gap: ${gapWidth};
-  width: ${commonWidth};
+  gap: 20px;
+  width: 120px;
   flex-wrap: wrap;
   box-sizing: border-box;
 `;

@@ -182,7 +182,16 @@ function App() {
       </CenteredContainerUI>
       {renderTransport()}
       <CenteredContainerUI>
-        <TrackRowUI>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '20px',
+            maxWidth: '80%',
+            flexWrap: 'wrap',
+            marginTop: '30px',
+          }}
+        >
           {renderTracks.map((track) => {
             const clipSlot = track?.clipSlots[selectedSceneIndex];
 
@@ -227,7 +236,7 @@ function App() {
               </TrackSlotUI>
             );
           })}
-        </TrackRowUI>
+        </div>
       </CenteredContainerUI>
     </>
   );
@@ -256,7 +265,7 @@ function App() {
     >
       <div>
         {renderHeader()}
-        <div>{renderRows()}</div>
+        <div style={{ paddingTop: '5%' }}>{renderRows()}</div>
       </div>
     </BackdropUI>
   );
