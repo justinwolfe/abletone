@@ -180,6 +180,7 @@ function App() {
           })}
         </Stack>
       </CenteredContainerUI>
+      {renderTransport()}
       <CenteredContainerUI>
         <TrackRowUI>
           {renderTracks.map((track) => {
@@ -255,10 +256,7 @@ function App() {
     >
       <div>
         {renderHeader()}
-        <div>
-          {renderRows()}
-          {renderTransport()}
-        </div>
+        <div>{renderRows()}</div>
       </div>
     </BackdropUI>
   );
