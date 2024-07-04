@@ -126,11 +126,10 @@ function App() {
   };
 
   const renderHeader = () => (
-    <CenterBoxUI>
+    <>
       <Button
         variant={metronomeEnabled ? 'contained' : 'outlined'}
         onClick={() => sendToApi({ type: 'TOGGLE_METRONOME' })}
-        style={{ margin: '10px' }}
       >
         <Schedule />
       </Button>
@@ -152,7 +151,7 @@ function App() {
       >
         <Delete />
       </Button>
-    </CenterBoxUI>
+    </>
   );
 
   const renderCenter = () => <CenterBoxUI>{renderHeader()}</CenterBoxUI>;
@@ -162,7 +161,14 @@ function App() {
       <div
         style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}
       >
-        <div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            gap: '10px',
+          }}
+        >
           {monitorTracks.map((trackToRender: any) => {
             return (
               <Button
@@ -192,15 +198,17 @@ function App() {
 
   const renderTransport = () => (
     <TransportContainerUI>
-      <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
-        <PlayArrow style={{ height: '100px', width: '100px' }} />
-      </IconButton>
-      <IconButton onClick={() => sendToApi({ type: 'STOP' })}>
-        <Stop style={{ height: '100px', width: '100px' }} />
-      </IconButton>
       <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
         <Mic style={{ height: '100px', width: '100px' }} />
       </IconButton>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
+          <PlayArrow style={{ height: '50px', width: '50px' }} />
+        </IconButton>
+        <IconButton onClick={() => sendToApi({ type: 'STOP' })}>
+          <Stop style={{ height: '50px', width: '50px' }} />
+        </IconButton>
+      </div>
     </TransportContainerUI>
   );
 

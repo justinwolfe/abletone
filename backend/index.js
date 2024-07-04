@@ -86,7 +86,7 @@ const init = async () => {
       const state = getState();
       key = key.toLowerCase();
 
-      // return;
+      return;
 
       if (key === 'forward slash') {
         isBlocked = !isBlocked;
