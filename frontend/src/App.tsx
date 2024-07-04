@@ -3,29 +3,20 @@ import './App.css';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import Stack from '@mui/material/Stack';
 import { PlayArrow, Stop, Mic, Schedule, Delete } from '@mui/icons-material';
 import Slider from '@mui/material/Slider';
 import styled from 'styled-components';
 
 import classNames from 'classnames';
 import {
-  CenterCardUI,
-  ConnectedUI,
-  MetaUI,
   BackdropUI,
-  WrapperUI,
-  TrackRowUI,
   TrackSlotUI,
   StopUI,
   RecordUI,
   PlayArrowUI,
   TriggeredUI,
   TransportContainerUI,
-  CenteredContainerUI,
 } from './App.css.ts';
-import { getRecordingStatus } from './app.utils';
-import { Icon } from '@mui/material';
 
 const CenterBoxUI = styled.div`
   display: flex;
@@ -128,7 +119,7 @@ function App() {
   };
 
   const renderHeader = () => (
-    <>
+    <CenterBoxUI>
       <Button
         variant={metronomeEnabled ? 'contained' : 'outlined'}
         onClick={() => sendToApi({ type: 'TOGGLE_METRONOME' })}
@@ -153,10 +144,8 @@ function App() {
       >
         <Delete />
       </Button>
-    </>
+    </CenterBoxUI>
   );
-
-  const renderCenter = () => <CenterBoxUI>{renderHeader()}</CenterBoxUI>;
 
   const renderRows = () => (
     <CenterBoxUI>
@@ -291,8 +280,7 @@ function App() {
         isPlaying && 'playing'
       )}
     >
-      {/* {renderHeader()} */}
-      {renderCenter()}
+      {renderHeader()}
       {renderRows()}
       {renderClips()}
     </BackdropUI>
