@@ -64,9 +64,11 @@ const handleMessage = async (message, ws) => {
     case 'SET_TEMPO':
       await ableton.song.set('tempo', payload.tempo);
       break;
-    case 'INCREMENT_GROUP':
+    case 'INCREMENT_SCENE':
+      await handleSceneChange({ state, direction: +1 });
       break;
     case 'DECREMENT_SCENE':
+      await handleSceneChange({ state, direction: -1 });
       break;
     default:
       break;

@@ -118,7 +118,7 @@ export const CenteredContainerUI = styled.div`
 
 export const TransportContainerUI = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: end;
   width: 100%;
   padding-top: 5%;
 `;

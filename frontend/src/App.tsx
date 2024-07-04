@@ -3,7 +3,15 @@ import './App.css';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import { PlayArrow, Stop, Mic, Schedule, Delete } from '@mui/icons-material';
+import {
+  PlayArrow,
+  Stop,
+  Mic,
+  Schedule,
+  Delete,
+  ArrowDropUp,
+  ArrowDropDown,
+} from '@mui/icons-material';
 import Slider from '@mui/material/Slider';
 import styled from 'styled-components';
 
@@ -213,7 +221,21 @@ function App() {
             alignItems: 'center',
           }}
         >
-          <div>SCENE</div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <IconButton onClick={() => sendToApi({ type: 'DECREMENT_SCENE' })}>
+              <ArrowDropUp />
+            </IconButton>
+            {selectedSceneIndex + 1}
+            <IconButton onClick={() => sendToApi({ type: 'INCREMENT_SCENE' })}>
+              <ArrowDropDown />
+            </IconButton>
+          </div>
           <div
             style={{
               display: 'flex',
@@ -235,8 +257,6 @@ function App() {
                 isRecording: isClipRecording,
                 isTriggered,
               } = clipSlot;
-
-              console.log(clipSlot);
 
               const isSelected = track.id === selectedTrackId;
 
