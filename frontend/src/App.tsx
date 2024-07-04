@@ -226,6 +226,7 @@ function App() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
+              width: '64px',
             }}
           >
             <IconButton onClick={() => sendToApi({ type: 'DECREMENT_SCENE' })}>
