@@ -88,8 +88,6 @@ const init = async () => {
       const state = getState();
       key = key.toLowerCase();
 
-      return;
-
       if (key === 'forward slash') {
         isBlocked = !isBlocked;
         logBlockedStatus();
