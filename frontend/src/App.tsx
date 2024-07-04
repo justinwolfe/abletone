@@ -217,58 +217,67 @@ function App() {
       <CenterBoxUI>
         <div
           style={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: '20px',
-            maxWidth: '80%',
-            flexWrap: 'wrap',
-            marginTop: '0px',
+            display: 'grid',
+            gridTemplateColumns: '15% 1fr',
+            alignItems: 'center',
           }}
         >
-          {renderTracks.map((track) => {
-            const clipSlot = track?.clipSlots[selectedSceneIndex];
+          <div>SCENE</div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: '20px',
+              maxWidth: '80%',
+              flexWrap: 'wrap',
+              marginTop: '0px',
+            }}
+          >
+            {renderTracks.map((track) => {
+              const clipSlot = track?.clipSlots[selectedSceneIndex];
 
-            if (!clipSlot) {
-              return 'error';
-            }
+              if (!clipSlot) {
+                return 'error';
+              }
 
-            const {
-              hasClip,
-              isPlaying,
-              isRecording: isClipRecording,
-              isTriggered,
-            } = clipSlot;
+              const {
+                hasClip,
+                isPlaying,
+                isRecording: isClipRecording,
+                isTriggered,
+              } = clipSlot;
 
-            console.log(clipSlot);
+              console.log(clipSlot);
 
-            const isSelected = track.id === selectedTrackId;
+              const isSelected = track.id === selectedTrackId;
 
-            return (
-              <TrackSlotUI
-                key={track.id}
-                className={classNames(isSelected && 'isSelected')}
-                onClick={() => {
-                  console.log('hi', clipSlot);
-                  sendToApi({
-                    type: 'TOGGLE_CLIP',
-                    payload: {
-                      clipSlotId: clipSlot.id,
-                    },
-                  });
-                }}
-                tabIndex={0}
-              >
-                {Boolean(hasClip && !isPlaying) && <PlayArrowUI />}
-                {Boolean(hasClip && isPlaying && !isClipRecording) && (
-                  <StopUI />
-                )}
-                {Boolean(!hasClip && isTriggered) && <TriggeredUI />}
-                {Boolean(hasClip && isPlaying && isClipRecording) && (
-                  <RecordUI />
-                )}
-              </TrackSlotUI>
-            );
-          })}
+              return (
+                <TrackSlotUI
+                  key={track.id}
+                  className={classNames(isSelected && 'isSelected')}
+                  onClick={() => {
+                    console.log('hi', clipSlot);
+                    sendToApi({
+                      type: 'TOGGLE_CLIP',
+                      payload: {
+                        clipSlotId: clipSlot.id,
+                      },
+                    });
+                  }}
+                  tabIndex={0}
+                >
+                  {Boolean(hasClip && !isPlaying) && <PlayArrowUI />}
+                  {Boolean(hasClip && isPlaying && !isClipRecording) && (
+                    <StopUI />
+                  )}
+                  {Boolean(!hasClip && isTriggered) && <TriggeredUI />}
+                  {Boolean(hasClip && isPlaying && isClipRecording) && (
+                    <RecordUI />
+                  )}
+                </TrackSlotUI>
+              );
+            })}
+          </div>
         </div>
       </CenterBoxUI>
     );
