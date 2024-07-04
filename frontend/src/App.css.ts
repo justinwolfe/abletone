@@ -12,7 +12,7 @@ const commonWidth = '100vw';
 
 export const TrackSlotUI = styled(Paper)`
   height: 50px;
-  width: 120px;
+  width: 85px;
   box-sizing: border-box; // Include padding and border in the element's width
   padding: 10px; // Example padding
   border: 1px solid #ccc; // Example border
@@ -68,6 +68,7 @@ export const BackdropUI = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: #f7f7ff;
+  overflow-x: hidden;
 
   transition: background-color 0.4s ease;
 

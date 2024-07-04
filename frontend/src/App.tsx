@@ -118,39 +118,45 @@ function App() {
   };
 
   const renderHeader = () => (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'space-between',
-      }}
-    >
-      <Button
-        variant={metronomeEnabled ? 'contained' : 'outlined'}
-        onClick={() => sendToApi({ type: 'TOGGLE_METRONOME' })}
-        style={{ margin: '10px' }}
+    <CenteredContainerUI>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          width: '100%',
+          justifyContent: 'space-between',
+          marginLeft: '8%',
+          marginRight: '8%',
+          marginTop: '5%',
+        }}
       >
-        <Schedule />
-      </Button>
-      <div>
-        <Slider
-          aria-label="Tempo"
-          value={tempo}
-          onChange={handleTempoChange}
-          min={40}
-          max={240}
-          style={{ width: 150, margin: '10px' }}
-        />
+        <Button
+          variant={metronomeEnabled ? 'contained' : 'outlined'}
+          onClick={() => sendToApi({ type: 'TOGGLE_METRONOME' })}
+          style={{ margin: '10px' }}
+        >
+          <Schedule />
+        </Button>
+        <div>
+          <Slider
+            aria-label="Tempo"
+            value={tempo}
+            onChange={handleTempoChange}
+            min={60}
+            max={160}
+            style={{ width: 150, margin: '10px' }}
+            valueLabelDisplay="on"
+          />
+        </div>
+        <Button
+          variant={'contained'}
+          onClick={() => sendToApi({ type: 'DELETE_ALL_CLIPS' })}
+          style={{ margin: '10px' }}
+        >
+          <Delete />
+        </Button>
       </div>
-      <Button
-        variant={'contained'}
-        onClick={() => sendToApi({ type: 'DELETE_ALL_CLIPS' })}
-        style={{ margin: '10px' }}
-      >
-        <Delete />
-      </Button>
-    </div>
+    </CenteredContainerUI>
   );
 
   const renderRows = () => (
@@ -189,7 +195,7 @@ function App() {
             gap: '20px',
             maxWidth: '80%',
             flexWrap: 'wrap',
-            marginTop: '30px',
+            marginTop: '0px',
           }}
         >
           {renderTracks.map((track) => {
