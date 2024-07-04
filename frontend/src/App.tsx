@@ -30,8 +30,10 @@ import { Icon } from '@mui/material';
 const CenterBoxUI = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 92%;
-  padding: 4%;
+  width: 76%;
+  padding-left: 12%;
+  padding-right: 12%;
+  padding-top: 7%;
 `;
 
 function App() {
@@ -227,8 +229,6 @@ function App() {
             style={{
               display: 'flex',
               flexDirection: 'row',
-              gap: '20px',
-              maxWidth: '80%',
               flexWrap: 'wrap',
               marginTop: '0px',
             }}
