@@ -230,11 +230,11 @@ function App() {
             }}
           >
             <IconButton onClick={() => sendToApi({ type: 'DECREMENT_SCENE' })}>
-              <ArrowDropUp />
+              <ArrowDropUp sx={{ fontSize: 70 }} />
             </IconButton>
-            {selectedSceneIndex + 1}
+            <div style={{ fontSize: '30px' }}>{selectedSceneIndex + 1}</div>
             <IconButton onClick={() => sendToApi({ type: 'INCREMENT_SCENE' })}>
-              <ArrowDropDown />
+              <ArrowDropDown sx={{ fontSize: 70 }} />
             </IconButton>
           </div>
           <div
