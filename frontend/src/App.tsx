@@ -27,6 +27,13 @@ import {
 import { getRecordingStatus } from './app.utils';
 import { Icon } from '@mui/material';
 
+const CenterBoxUI = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 92%;
+  padding: 4%;
+`;
+
 function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
     'ws://localhost:3005/ws'
@@ -119,55 +126,6 @@ function App() {
   };
 
   const renderHeader = () => (
-    <CenteredContainerUI>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          width: '100%',
-          justifyContent: 'space-between',
-          marginLeft: '8%',
-          marginRight: '8%',
-          marginTop: '5%',
-        }}
-      >
-        <Button
-          variant={metronomeEnabled ? 'contained' : 'outlined'}
-          onClick={() => sendToApi({ type: 'TOGGLE_METRONOME' })}
-          style={{ margin: '10px' }}
-        >
-          <Schedule />
-        </Button>
-        <div>
-          <Slider
-            aria-label="Tempo"
-            value={tempo}
-            onChange={handleTempoChange}
-            min={60}
-            max={160}
-            style={{ width: 150, margin: '10px' }}
-            valueLabelDisplay="on"
-          />
-        </div>
-        <Button
-          variant={'contained'}
-          onClick={() => sendToApi({ type: 'DELETE_ALL_CLIPS' })}
-          style={{ margin: '10px' }}
-        >
-          <Delete />
-        </Button>
-      </div>
-    </CenteredContainerUI>
-  );
-
-  const CenterBoxUI = styled.div`
-    display: flex;
-    justify-content: space-between;
-    width: 96%;
-    padding: 4%;
-  `;
-
-  const renderCenter = () => (
     <CenterBoxUI>
       <Button
         variant={metronomeEnabled ? 'contained' : 'outlined'}
@@ -197,10 +155,14 @@ function App() {
     </CenterBoxUI>
   );
 
+  const renderCenter = () => <CenterBoxUI>{renderHeader()}</CenterBoxUI>;
+
   const renderRows = () => (
-    <>
-      <CenteredContainerUI>
-        <Stack direction="row" spacing={1}>
+    <CenterBoxUI>
+      <div
+        style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}
+      >
+        <div>
           {monitorTracks.map((trackToRender: any) => {
             return (
               <Button
@@ -222,10 +184,29 @@ function App() {
               </Button>
             );
           })}
-        </Stack>
-      </CenteredContainerUI>
-      {renderTransport()}
-      <CenteredContainerUI>
+        </div>
+        {renderTransport()}
+      </div>
+    </CenterBoxUI>
+  );
+
+  const renderTransport = () => (
+    <TransportContainerUI>
+      <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
+        <PlayArrow style={{ height: '100px', width: '100px' }} />
+      </IconButton>
+      <IconButton onClick={() => sendToApi({ type: 'STOP' })}>
+        <Stop style={{ height: '100px', width: '100px' }} />
+      </IconButton>
+      <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
+        <Mic style={{ height: '100px', width: '100px' }} />
+      </IconButton>
+    </TransportContainerUI>
+  );
+
+  const renderClips = () => {
+    return (
+      <CenterBoxUI>
         <div
           style={{
             display: 'flex',
@@ -281,23 +262,9 @@ function App() {
             );
           })}
         </div>
-      </CenteredContainerUI>
-    </>
-  );
-
-  const renderTransport = () => (
-    <TransportContainerUI>
-      <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
-        <PlayArrow style={{ height: '100px', width: '100px' }} />
-      </IconButton>
-      <IconButton onClick={() => sendToApi({ type: 'STOP' })}>
-        <Stop style={{ height: '100px', width: '100px' }} />
-      </IconButton>
-      <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
-        <Mic style={{ height: '100px', width: '100px' }} />
-      </IconButton>
-    </TransportContainerUI>
-  );
+      </CenterBoxUI>
+    );
+  };
 
   return (
     <BackdropUI
@@ -307,11 +274,10 @@ function App() {
         isPlaying && 'playing'
       )}
     >
-      <div>
-        {/* {renderHeader()} */}
-        {renderCenter()}
-        <div style={{ paddingTop: '5%' }}>{renderRows()}</div>
-      </div>
+      {/* {renderHeader()} */}
+      {renderCenter()}
+      {renderRows()}
+      {renderClips()}
     </BackdropUI>
   );
 }
