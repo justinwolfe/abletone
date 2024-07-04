@@ -156,50 +156,42 @@ function App() {
   );
 
   const renderRows = () => (
-    <CenterBoxUI>
+    <CenterBoxUI style={{ justifyContent: 'center' }}>
       <div
-        style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: '10px',
+        }}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            gap: '10px',
-          }}
-        >
-          {monitorTracks.map((trackToRender: any) => {
-            return (
-              <Button
-                key={trackToRender.id}
-                value={Boolean(trackToRender.recordSendEnabled)}
-                variant={
-                  trackToRender.recordSendEnabled ? 'contained' : 'outlined'
-                }
-                onClick={() => {
-                  sendToApi({
-                    type: 'TOGGLE_SEND',
-                    payload: {
-                      trackKey: trackToRender.name,
-                    },
-                  });
-                }}
-              >
-                {trackToRender.name}
-              </Button>
-            );
-          })}
-        </div>
-        {renderTransport()}
+        {monitorTracks.map((trackToRender: any) => {
+          return (
+            <Button
+              key={trackToRender.id}
+              value={Boolean(trackToRender.recordSendEnabled)}
+              variant={
+                trackToRender.recordSendEnabled ? 'contained' : 'outlined'
+              }
+              onClick={() => {
+                sendToApi({
+                  type: 'TOGGLE_SEND',
+                  payload: {
+                    trackKey: trackToRender.name,
+                  },
+                });
+              }}
+            >
+              {trackToRender.name}
+            </Button>
+          );
+        })}
       </div>
     </CenterBoxUI>
   );
 
   const renderTransport = () => (
     <TransportContainerUI>
-      <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
-        <Mic style={{ height: '100px', width: '100px' }} />
-      </IconButton>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <IconButton onClick={() => sendToApi({ type: 'PLAY' })}>
           <PlayArrow style={{ height: '50px', width: '50px' }} />
@@ -208,6 +200,9 @@ function App() {
           <Stop style={{ height: '50px', width: '50px' }} />
         </IconButton>
       </div>
+      <IconButton onClick={() => sendToApi({ type: 'FIRE' })}>
+        <Mic style={{ height: '100px', width: '100px' }} />
+      </IconButton>
     </TransportContainerUI>
   );
 
@@ -217,7 +212,7 @@ function App() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '15% 1fr',
+            gridTemplateColumns: '15% 1fr .25fr',
             alignItems: 'center',
           }}
         >
@@ -288,6 +283,7 @@ function App() {
               );
             })}
           </div>
+          {renderTransport()}
         </div>
       </CenterBoxUI>
     );
