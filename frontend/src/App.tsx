@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import { PlayArrow, Stop, Mic, Schedule, Delete } from '@mui/icons-material';
 import Slider from '@mui/material/Slider';
+import styled from 'styled-components';
 
 import classNames from 'classnames';
 import {
@@ -159,6 +160,43 @@ function App() {
     </CenteredContainerUI>
   );
 
+  const CenterBoxUI = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 96%;
+    padding: 4%;
+  `;
+
+  const renderCenter = () => (
+    <CenterBoxUI>
+      <Button
+        variant={metronomeEnabled ? 'contained' : 'outlined'}
+        onClick={() => sendToApi({ type: 'TOGGLE_METRONOME' })}
+        style={{ margin: '10px' }}
+      >
+        <Schedule />
+      </Button>
+      <div>
+        <Slider
+          aria-label="Tempo"
+          value={tempo}
+          onChange={handleTempoChange}
+          min={60}
+          max={160}
+          style={{ width: 250, margin: '10px' }}
+          valueLabelDisplay="on"
+        />
+      </div>
+      <Button
+        variant={'contained'}
+        onClick={() => sendToApi({ type: 'DELETE_ALL_CLIPS' })}
+        style={{ margin: '10px' }}
+      >
+        <Delete />
+      </Button>
+    </CenterBoxUI>
+  );
+
   const renderRows = () => (
     <>
       <CenteredContainerUI>
@@ -270,7 +308,8 @@ function App() {
       )}
     >
       <div>
-        {renderHeader()}
+        {/* {renderHeader()} */}
+        {renderCenter()}
         <div style={{ paddingTop: '5%' }}>{renderRows()}</div>
       </div>
     </BackdropUI>
