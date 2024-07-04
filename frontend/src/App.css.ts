@@ -16,7 +16,7 @@ export const TrackSlotUI = styled(Paper)`
   box-sizing: border-box; // Include padding and border in the element's width
   padding: 10px; // Example padding
   border: 1px solid #ccc; // Example border
-  margin: 10px !important;
+  margin: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
