@@ -136,13 +136,15 @@ export const triggerRecord = async ({ state, ableton }) => {
     'highlighted_clip_slot'
   );
 
-  if (
-    highlightedClipSlot.raw.is_recording ||
-    (!highlightedClipSlot.raw.has_clip && trackType === TRACK_TYPES.RENDER)
-  ) {
+  if (highlightedClipSlot?.raw?.is_recording) {
     await highlightedClipSlot.fire();
     return;
   }
+
+  // if (!highlightedClipSlot.raw.has_clip && trackType === TRACK_TYPES.RENDER) {
+  //   await highlightedClipSlot.fire();
+  //   return;
+  // }
 
   const matchingOutputTracks = await findMatchingOutputTracks({
     state,
