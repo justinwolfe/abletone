@@ -11,33 +11,37 @@ import { ableton } from './abletonListeners.js';
 
 const getSerializableState = async (state) => {
   const trackPromises = state.tracks.map(async (track) => {
-    const clipSlots = await track.get('clip_slots');
-    const mixerDevice = await track.get('mixer_device');
-    const sends = await mixerDevice.get('sends');
-    const outputSend = sends.find((send) =>
-      send.raw.name.toLowerCase().includes('loops')
-    );
+    try {
+      const clipSlots = await track.get('clip_slots');
+      const mixerDevice = await track.get('mixer_device');
+      const sends = await mixerDevice.get('sends');
+      const outputSend = sends.find((send) =>
+        send.raw.name.toLowerCase().includes('loops')
+      );
 
-    const outputSendValue = outputSend?.raw?.value || 0;
+      const outputSendValue = outputSend?.raw?.value || 0;
 
-    return {
-      id: track.raw.id,
-      name: track.raw.name,
-      group: track.raw.name.split('-')?.[0].trim(),
-      color: new Color(track.raw.color).hex,
-      isRender: track.raw.name.includes('r-'),
-      recordSendEnabled: outputSendValue > 0 ? true : false,
-      clipSlots: clipSlots.map((clipSlot, i) => {
-        return {
-          index: i,
-          id: clipSlot.raw.id,
-          hasClip: clipSlot.raw.has_clip,
-          isPlaying: clipSlot.raw.is_playing,
-          isRecording: clipSlot.raw.is_recording,
-          isTriggered: clipSlot.raw.is_triggered,
-        };
-      }),
-    };
+      return {
+        id: track.raw.id,
+        name: track.raw.name,
+        group: track.raw.name.split('-')?.[0].trim(),
+        color: new Color(track.raw.color).hex,
+        isRender: track.raw.name.includes('r-'),
+        recordSendEnabled: outputSendValue > 0 ? true : false,
+        clipSlots: clipSlots.map((clipSlot, i) => {
+          return {
+            index: i,
+            id: clipSlot.raw.id,
+            hasClip: clipSlot.raw.has_clip,
+            isPlaying: clipSlot.raw.is_playing,
+            isRecording: clipSlot.raw.is_recording,
+            isTriggered: clipSlot.raw.is_triggered,
+          };
+        }),
+      };
+    } catch (e) {
+      console.log(e);
+    }
   });
 
   const serializableTracks = await Promise.all(trackPromises);
