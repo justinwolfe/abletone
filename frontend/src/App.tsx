@@ -37,7 +37,12 @@ const CenterBoxUI = styled.div`
 
 function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
-    'ws://localhost:3005/ws'
+    'ws://localhost:3005/ws',
+    {
+      shouldReconnect: () => true, // Always reconnect on close
+      reconnectAttempts: 10, // Number of reconnect attempts
+      reconnectInterval: 3000, // Reconnect interval in milliseconds
+    }
   );
   const [apiState, setApiState] = useState({});
   const connectionStatus = {
@@ -48,7 +53,14 @@ function App() {
     [ReadyState.UNINSTANTIATED]: 'uninstantiated',
   }[readyState];
 
-  console.log(apiState);
+  useEffect(() => {
+    if (readyState === ReadyState.OPEN) {
+      console.log('WebSocket connection established');
+    } else if (readyState === ReadyState.CLOSED) {
+      console.log('WebSocket connection closed');
+      window.location.reload(); // Reload the frontend when connection is closed
+    }
+  }, [readyState]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const sendToApi = (message: any) => {
