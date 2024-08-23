@@ -1,47 +1,53 @@
 // server.js
 import express from 'express';
 import http from 'http';
-import net from 'net';
 import {
   state,
   subscribeToStateChanges,
   unsubscribeFromStateChanges,
 } from './state.js';
 import { Color } from 'ableton-js/util/color.js';
+import { ableton } from './abletonListeners.js';
 
 const getSerializableState = async (state) => {
   const trackPromises = state.tracks.map(async (track) => {
-    const [key, type] = track.raw.name.split('-');
+    try {
+      const clipSlots = await track.get('clip_slots');
+      const mixerDevice = await track.get('mixer_device');
+      const sends = await mixerDevice.get('sends');
+      const outputSend = sends.find((send) =>
+        send.raw.name.toLowerCase().includes('loops')
+      );
 
-    if (!key || !type) {
-      return false;
+      const outputSendValue = outputSend?.raw?.value || 0;
+
+      return {
+        id: track.raw.id,
+        name: track.raw.name,
+        group: track.raw.name.split('-')?.[0].trim(),
+        color: new Color(track.raw.color).hex,
+        isRender: track.raw.name.includes('r-'),
+        recordSendEnabled: outputSendValue > 0 ? true : false,
+        clipSlots: clipSlots.map((clipSlot, i) => {
+          return {
+            index: i,
+            id: clipSlot.raw.id,
+            hasClip: clipSlot.raw.has_clip,
+            isPlaying: clipSlot.raw.is_playing,
+            isRecording: clipSlot.raw.is_recording,
+            isTriggered: clipSlot.raw.is_triggered,
+          };
+        }),
+      };
+    } catch (e) {
+      console.log(e);
     }
-
-    const clipSlots = await track.get('clip_slots');
-
-    return {
-      id: track.raw.id,
-      name: track.raw.name,
-      group: track.raw.name.split('-')?.[0].trim(),
-      color: new Color(track.raw.color).hex,
-      isGroup: type.trim() === 'g',
-      isMonitor: type.trim() === 'm',
-      isRender: type.trim() === 'r',
-      clipSlots: clipSlots.map((clipSlot, i) => {
-        return {
-          index: i,
-          id: clipSlot.raw.id,
-          hasClip: clipSlot.raw.has_clip,
-          isPlaying: clipSlot.raw.is_playing,
-          isRecording: clipSlot.raw.is_recording,
-          isTriggered: clipSlot.raw.is_triggered,
-        };
-      }),
-    };
   });
 
   const serializableTracks = await Promise.all(trackPromises);
   const filteredTracks = serializableTracks.filter(Boolean);
+  const metronome = await ableton.song.get('metronome');
+  const tempo = await ableton.song.get('tempo');
 
   return {
     selectedSceneIndex: state.selectedSceneIndex,
@@ -50,10 +56,12 @@ const getSerializableState = async (state) => {
     selectedTrackName: state.selectedTrackName,
     selectedTrackId: state.selectedTrackId,
     selectedGroup: state.selectedTrackName?.split('-')?.[0],
+    metronomeEnabled: metronome,
     isRecording: state.isRecording,
     isPlaying: state.isPlaying,
     songTime: state.songTime,
     tracks: filteredTracks,
+    tempo: tempo,
   };
 };
 

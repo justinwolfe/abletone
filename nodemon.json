@@ -1,0 +1,7 @@
+{
+  "watch": ["backend"],
+  "exec": "npm run dev --prefix ./backend",
+  "ext": "js,json",
+  "restartable": "rs",
+  "ignore": ["frontend/*"]
+}

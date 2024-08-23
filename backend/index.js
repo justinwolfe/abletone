@@ -10,7 +10,14 @@ import {
 } from './sceneTrackLogic.js';
 import AbletonMixManager from './mix.js';
 import { initServer } from './server.js';
-import { stopClip, deleteClip, triggerRecord } from './abletonHandlers.js';
+import {
+  stopClip,
+  deleteClip,
+  triggerRecord,
+  toggleSend,
+  toggleClip,
+  deleteAllClips,
+} from './abletonHandlers.js';
 
 const DOUBLE_PRESS_DELAY = 600; // milliseconds
 let lastKeyPress = { key: null, time: 0 };
@@ -25,19 +32,47 @@ const isDoublePress = (key) => {
 
 const handleMessage = async (message, ws) => {
   const parsedMessage = JSON.parse(message);
+  console.log(parsedMessage);
   const { type, payload } = parsedMessage;
   const state = getState();
 
   switch (type) {
-    case 'INCREMENT_GROUP':
+    case 'FIRE':
+      await triggerRecord({ state, ableton });
+      break;
+    case 'STOP':
+      await ableton.song.stopPlaying();
+      break;
+    case 'PLAY':
+      await ableton.song.startPlaying();
+      break;
+    case 'DELETE_ALL_CLIPS':
+      await deleteAllClips({ state, ableton });
+      await ableton.song.stopPlaying();
+      break;
+    case 'TOGGLE_SEND':
+      await toggleSend({ state, ableton, trackKey: payload.trackKey });
+      break;
+    case 'TOGGLE_CLIP':
+      await toggleClip({ state, ableton, clipSlotId: payload.clipSlotId });
+      break;
+    case 'TOGGLE_METRONOME': {
+      const currentValue = await ableton.song.get('metronome');
+      await ableton.song.set('metronome', !currentValue);
+      break;
+    }
+    case 'SET_TEMPO':
+      await ableton.song.set('tempo', payload.tempo);
+      break;
+    case 'INCREMENT_SCENE':
+      await handleSceneChange({ state, direction: +1 });
       break;
     case 'DECREMENT_SCENE':
+      await handleSceneChange({ state, direction: -1 });
       break;
     default:
       break;
   }
-  // await ableton.song.stopAllClips();
-  console.log(parsedMessage);
 };
 
 const init = async () => {
@@ -52,8 +87,6 @@ const init = async () => {
     initKeys(async (key) => {
       const state = getState();
       key = key.toLowerCase();
-
-      // return;
 
       if (key === 'forward slash') {
         isBlocked = !isBlocked;
@@ -85,7 +118,7 @@ const init = async () => {
         } else {
           if (key === 'a') {
             // Double press 'a'
-            await ableton.song.stopAllClips();
+            await ableton.song.stopPlaying();
           } else if (key === 'b') {
             // Double press 'b
             await ableton.song.duplicateScene(state.selectedSceneIndex);
@@ -107,6 +140,7 @@ const init = async () => {
           await deleteClip({ state, ableton });
           break;
         }
+
         case 'q':
           await mixManager.saveMix(ableton);
           break;
